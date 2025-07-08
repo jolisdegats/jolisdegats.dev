@@ -2,7 +2,7 @@
 
 import BackgroundImage from "@/components/BackgroundImage";
 import { toggleHelpMarkers, changeModal } from "@/lib/context";
-import { useAppContext } from "@/lib/hooks";
+import { useAppContext, useIsDesktop } from "@/lib/hooks";
 import { FaQuestionCircle, FaRegCopyright } from "react-icons/fa";
 import dynamic from "next/dynamic";
 import { useEffect, useRef } from "react";
@@ -10,44 +10,38 @@ import { useEffect, useRef } from "react";
 const Credits = dynamic(() => import("@/components/Credits"), { ssr: false });
 
 const ClientPage = () => {
-    const { dispatch } = useAppContext(); 
+    const { dispatch } = useAppContext();
+    const isDesktop = useIsDesktop();
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     
-    // Calculate minimum width based on viewport height and aspect ratio
-    const aspectRatio = 2688 / 1792; // Original design aspect ratio
-    const minWidthVh = `${aspectRatio * 100}vh`;
+    const aspectRatio = 2688 / 1792;
+    const minWidthVh = !isDesktop ? `${aspectRatio * 100}vh` : '100vw';
     
-    // Function to center the scroll position
     const centerScrollPosition = () => {
         if (scrollContainerRef.current) {
             const container = scrollContainerRef.current;
             const containerWidth = container.scrollWidth;
             const viewportWidth = container.clientWidth;
             
-            // Only center if content is wider than viewport (mobile case)
             if (containerWidth > viewportWidth) {
                 const centerPosition = (containerWidth - viewportWidth) / 2;
                 container.scrollTo({
                     left: centerPosition,
-                    behavior: 'instant' // No animation on initial load
+                    behavior: 'instant'
                 });
             }
         }
     };
     
-    // Center on mount and window resize
     useEffect(() => {
-        // Center immediately
         centerScrollPosition();
         
-        // Center on window resize (orientation change, etc.)
         const handleResize = () => {
-            setTimeout(centerScrollPosition, 100); // Small delay to ensure layout is updated
+            setTimeout(centerScrollPosition, 100);
         };
         
         window.addEventListener('resize', handleResize);
         
-        // Also center when the background image loads (in case layout changes)
         const handleLoad = () => {
             setTimeout(centerScrollPosition, 200);
         };
@@ -64,7 +58,7 @@ const ClientPage = () => {
         <div 
             ref={scrollContainerRef}
             className="relative w-svw h-svh overflow-x-auto overflow-y-hidden"
-            style={{ scrollBehavior: 'smooth' }} // Smooth scrolling for user interactions
+            style={{ scrollBehavior: 'smooth' }}
         >
             <div 
                 className="relative h-full min-w-full"
@@ -74,7 +68,7 @@ const ClientPage = () => {
                 }}
             >
                 <BackgroundImage />
-                <div className="absolute bottom-5 right-5 flex space-x-1">
+                <div className="fixed bottom-5 right-5 flex space-x-1">
                     <button 
                         onTouchStart={() => dispatch(toggleHelpMarkers())}
                         onTouchEnd={() => setTimeout(() => dispatch(toggleHelpMarkers()), 300)}
