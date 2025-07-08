@@ -2,8 +2,8 @@ import Image, { StaticImageData } from 'next/image';
 import { Suspense, useMemo } from 'react';
 
 import imageUrl from '@/assets/main-background.webp';
-import imageUrlMobile from '@/assets/main-background_compressed.webp';
 import gifCode from '@/assets/gif-code.webp';
+import gifTyping from '@/assets/gif-typing.webp';
 import cloud1 from '@/assets/cloud1.webp';
 import cloud2 from '@/assets/cloud2.webp';
 import cloud3 from '@/assets/cloud3.webp';
@@ -111,30 +111,27 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
         src={imageUrl} 
         alt="imageUrl" 
         fill 
-        className='object-cover hidden sm:block' 
+        className='object-cover' 
         onLoad={() => onLoad(false)}
         sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 100vw"
       />
 
-      {/* Main background image - Mobile */}
-      <Image 
-        placeholder='blur' 
-        priority 
-        src={imageUrlMobile} 
-        alt="imageUrlMobile" 
-        fill 
-        className='object-cover block sm:hidden' 
-        onLoad={() => onLoad(false)}
-        sizes="(max-width: 640px) 640px, 100vw"
-      />
-
-      <LazyImage 
+<LazyImage 
         src={gifCode} 
         alt="gifCode" 
         fill 
         className='object-cover'
         unoptimized={true}
       />
+<LazyImage 
+        src={gifTyping} 
+        alt="gifTyping" 
+        fill 
+        className='object-cover'
+        unoptimized={true}
+      />
+ 
+     
     </div>
   );
 }
