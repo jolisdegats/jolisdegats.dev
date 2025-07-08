@@ -53,7 +53,6 @@ const Credits = () => {
                         <ul className="list-none pl-0">
                             <li className="mb-2">Next.js</li>
                             <li className="mb-2">React</li>
-                            <li className="mb-2">Motion</li>
                             <li className="mb-2">Custom sound management hook</li>
                             <li>Tailwind CSS</li>
                         </ul>

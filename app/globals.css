@@ -28,6 +28,8 @@ body {
     )
     rgb(var(--background-start-rgb));
   font-family: 'Roboto', sans-serif;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -68,8 +70,94 @@ a:hover {
   -webkit-appearance: none;
 }
 
-/* Performance optimizations for animations */
-.animate-cloud {
+
+
+/* CSS Animations */
+@keyframes cloudMove {
+  from { 
+    transform: translateX(0vw); 
+  }
+  to { 
+    transform: translateX(100vw); 
+  }
+}
+
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes slideUp {
+  0% { 
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  0% { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% { 
+    opacity: 0;
+    transform: translateY(5px);
+  }
+}
+
+@keyframes pageTransition {
+  0% { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-backdrop-enter {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.modal-backdrop-exit {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+
+.modal-content-enter {
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+.modal-content-exit {
+  animation: slideDown 0.3s ease-out forwards;
+}
+
+.page-transition {
+  animation: pageTransition 0.75s ease-in-out;
+}
+
+/* Scroll optimization */
+.scroll-container {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: none;
+  scroll-behavior: smooth;
+}
+
+
+/* Animation classes */
+.cloud-animation {
+  animation-name: cloudMove;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
   will-change: transform;
-  transform: translateZ(0);
 }

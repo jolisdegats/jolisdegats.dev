@@ -1,6 +1,5 @@
 import Image, { StaticImageData } from 'next/image';
-import { motion } from "motion/react";
-import { Suspense, useCallback, useMemo } from 'react';
+import { Suspense, useMemo } from 'react';
 
 import imageUrl from '@/assets/main-background.webp';
 import imageUrlMobile from '@/assets/main-background_compressed.webp';
@@ -21,6 +20,14 @@ interface LazyImageProps {
   [key: string]: any;
 }
 
+const getRandomDuration = () => {
+  return Math.random() * 240 + 60;
+}
+
+const getRandomAnimationDelay = () => {
+  return -Math.random() * (240 + 60);
+}
+
 const LazyImage = ({ src, alt, unoptimized, ...props }: LazyImageProps) => (
   <Image
     loading="lazy"
@@ -32,9 +39,6 @@ const LazyImage = ({ src, alt, unoptimized, ...props }: LazyImageProps) => (
 );
 
 const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
-  const getRandomDuration = useCallback(() => {
-    return Math.random() * 240 + 120;
-  }, []);
 
   const cloudImages = useMemo(() => [cloud1, cloud2, cloud3, cloud4, cloud5], []);
 
@@ -43,8 +47,9 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
       key: cloud.src,
       href: cloud.src,
       id: `cloud${index + 1}`,
-      duration: getRandomDuration() * 2,
-    })), [cloudImages, getRandomDuration]);
+      duration: getRandomDuration(),
+      animationDelay: getRandomAnimationDelay(),
+    })), [cloudImages]);
 
   return (
     <div className='z-[-10] absolute top-0 left-0 w-full h-full'>
@@ -79,48 +84,21 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
           position: 'absolute', 
           top: 0, 
           left: 0,
-          willChange: 'transform',
-          transform: 'translateZ(0)',
         }}
       >
         <Suspense fallback={null}>
-          <motion.image
-            href={seaclouds.src}
-            width="100%"
-            height="100%"
-            preserveAspectRatio="xMidYMid slice"
-            initial={{ x: '-100%' }}
-            animate={{
-              x: ['0%', '100%']
-            }}
-            transition={{
-              duration: 500,
-              ease: 'linear',
-              repeat: Infinity,
-            }}
-            style={{
-              willChange: 'transform',
-            }}
-          />
-          {cloudAnimations.map(({ key, href, id, duration }) => (
-            <motion.image
+          {cloudAnimations.map(({ key, href, id, duration, animationDelay }) => (
+            <image
               key={key}
               href={href}
               id={id}
-              width="100%"
               height="100%"
               preserveAspectRatio="xMidYMid slice"
-              animate={{
-                x: ['0%', '100%']
-              }}
-              transition={{
-                duration,
-                ease: 'linear',
-                repeat: Infinity,
-              }}
+              className="cloud-animation"
               style={{
-                willChange: 'transform',
-              }}
+                animationDuration: `${duration}s`,
+                animationDelay: `${animationDelay}s`,
+              } as React.CSSProperties}
             />
           ))}
         </Suspense>
