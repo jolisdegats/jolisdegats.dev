@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import { Suspense, useState } from 'react';
 import Head from 'next/head';
 import backgroundImage from '@/assets/main-background.webp';
-import backgroundImageMobile from '@/assets/main-background_compressed.webp';
+// import backgroundImageMobile from '@/assets/main-background-compressed.webp';
 import sky from '@/assets/sky.webp';
 import sea from '@/assets/sea.webp';
 import seaclouds from '@/assets/seaclouds.webp';
@@ -11,7 +11,7 @@ import seaclouds from '@/assets/seaclouds.webp';
 
 const preloadImages = [
   backgroundImage,
-  backgroundImageMobile,
+  // backgroundImageMobile,
   sky,
   sea,
   seaclouds

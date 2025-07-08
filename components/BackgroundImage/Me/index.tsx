@@ -40,7 +40,7 @@ export const MarkerMe = () => {
            </div>
            <div className="lg:h-full w-full lg:w-1/2 order-2 lg:order-2">
              <div className="relative h-[300px] lg:h-full w-full">
-               <Image src={avatar.src} alt="avatar" fill className="object-cover" sizes="400px" placeholder="blur"/>
+               <Image src={avatar.src} alt="avatar" fill className="object-cover" sizes="400px" priority/>
              </div>
            </div>
          </div>
