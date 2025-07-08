@@ -3,7 +3,7 @@ import { Suspense, useMemo } from 'react';
 
 import imageUrl from '@/assets/main-background.webp';
 import gifCode from '@/assets/gif-code.webp';
-import gifTyping from '@/assets/gif-typing.webp';
+import gifTyping from '@/assets/gif-typing2.webp';
 import cloud1 from '@/assets/cloud1.webp';
 import cloud2 from '@/assets/cloud2.webp';
 import cloud3 from '@/assets/cloud3.webp';
