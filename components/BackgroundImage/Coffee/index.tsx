@@ -2,7 +2,7 @@ import Shape, { ShapeType } from "@/components/BackgroundImage/Shape";
 import { useAppContext } from "@/lib/hooks";
 import { changeModal } from "@/lib/context/ actions";
 import mug from '@/assets/sounds/mug.mp3';
-import Modal from "@/components/Modal";
+import Modal from "@/components/UI/Modal";
 import CoffeeMachine, { type CoffeeMachineRef, type HandleStateChange } from "@/components/CoffeeMachine";
 import { useRef, useState } from "react";
 import Mug from "@/components/CoffeeMachine/Mug";

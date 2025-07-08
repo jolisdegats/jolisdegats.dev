@@ -1,10 +1,11 @@
 'use client'
 
 import BackgroundImage from "@/components/BackgroundImage";
-import Credits from "@/components/Credits";
 import { toggleHelpMarkers, changeModal } from "@/lib/context";
 import { useAppContext } from "@/lib/hooks";
 import { FaQuestionCircle, FaRegCopyright } from "react-icons/fa";
+import dynamic from "next/dynamic";
+const Credits = dynamic(() => import("@/components/Credits"), { ssr: false });
 
 const ClientPage = () => {
     const { dispatch } = useAppContext(); 

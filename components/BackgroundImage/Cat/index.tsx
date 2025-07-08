@@ -4,7 +4,7 @@ import Shape, { type ShapeType } from '../Shape';
 import { useState, useCallback } from 'react'; // Added useCallback
 import { useSoundEffect } from '@/lib/hooks/useSoundEffect';
 
-const VOLUME = 0.4;
+const VOLUME = 0.2;
 
 export const MarkerCat = () => {
     const {play, fade, stop} = useSoundEffect(catPurring, { volume: 0});

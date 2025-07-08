@@ -1,7 +1,7 @@
 import Shape, { ShapeType } from "@/components/BackgroundImage/Shape";
 import { useAppContext } from "@/lib/hooks";
 import { changeModal } from "@/lib/context/ actions";
-import Modal from "@/components/Modal";
+import Modal from "@/components/UI/Modal";
 import Image from "next/image";
 import avatar from "@/assets/avatar.webp";
 import Head from "next/head";

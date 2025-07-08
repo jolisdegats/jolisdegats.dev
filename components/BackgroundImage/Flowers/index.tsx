@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import Modal from '@/components/Modal';
+import Modal from '@/components/UI/Modal';
 import Shape, { type ShapeType } from '@/components/BackgroundImage/Shape';
 import { changeModal } from '@/lib/context';
 import { useAppContext } from '@/lib/hooks';

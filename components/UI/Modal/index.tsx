@@ -1,7 +1,7 @@
 import { useEffect, useCallback, ReactNode, useRef } from 'react';
 import { AnimatePresence, motion } from "motion/react";
 import { useAppContext } from '@/lib/hooks';
-import Portal from '@/components/Portal';
+import Portal from '@/components/UI/Portal';
 import { changeModal } from '@/lib/context';
 
 type ModalProps = {
