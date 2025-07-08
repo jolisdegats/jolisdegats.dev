@@ -52,10 +52,10 @@ export default function RootLayout({
     <html lang="en" className={`${inter.className} ${playfair.className} antialiased`}>
       <body>
       <AppProvider>
-        <main className="w-screen h-screen overflow-hidden">
+        <main className="w-svw h-svh overflow-hidden">
     {children}
     <div id="portal-root" />
-    <div className='z-[-10] absolute top-0 left-0 w-screen h-screen'>
+    <div className='z-[-10] absolute top-0 left-0 w-svw h-svh'>
     </div>
     </main>
     </AppProvider>
