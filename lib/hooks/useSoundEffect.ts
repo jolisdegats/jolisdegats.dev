@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { audioContextManager } from '@/lib/context/audioContext';
 
 interface SoundEffect {
   play: (delay?: number) => void;
@@ -146,7 +147,7 @@ export const useSoundEffect = (soundPath: string, options: { volume?: number; pr
     }, stepDuration);
   };
 
-  const play = (delay?: number) => {
+  const play = async (delay?: number) => {
     if (!audioRef.current || !isMountedRef.current) return;
     
     if (playTimeoutRef.current) {
@@ -166,57 +167,51 @@ export const useSoundEffect = (soundPath: string, options: { volume?: number; pr
       stop();
     }
     
+    // Wait for audio context to be unlocked
+    try {
+      await audioContextManager.waitForUnlock();
+    } catch (error) {
+      // Silently fail if audio context can't be unlocked
+      console.warn('Audio context not available:', error);
+      return;
+    }
+    
     // Use the provided delay or fall back to the option
     const effectiveDelay = delay !== undefined ? delay : options.delay;
+    
+    const playAudio = async () => {
+      if (!audioRef.current || !isMountedRef.current) return;
+      
+      audioRef.current.currentTime = 0;
+      
+      try {
+        const playPromise = audioRef.current.play();
+        
+        if (playPromise !== undefined) {
+          await playPromise;
+          if (isMountedRef.current) {
+            isPlayingRef.current = true;
+          }
+        }
+      } catch (error) {
+        if (error instanceof Error && error.name !== 'AbortError' && isMountedRef.current) {
+          // Only log if it's not an abort error and still mounted
+          console.warn('Audio play failed:', error.message);
+        }
+        if (isMountedRef.current) {
+          isPlayingRef.current = false;
+        }
+      }
+    };
     
     // Apply delay if specified
     if (effectiveDelay && effectiveDelay > 0) {
       playTimeoutRef.current = setTimeout(() => {
-        if (!audioRef.current || !isMountedRef.current) return;
-        
-        audioRef.current.currentTime = 0;
-        
-        const playPromise = audioRef.current.play();
-        
-        if (playPromise !== undefined) {
-          playPromise
-            .then(() => {
-              if (isMountedRef.current) {
-                isPlayingRef.current = true;
-              }
-            })
-            .catch(error => {
-              if (error.name !== 'AbortError' && isMountedRef.current) {
-                console.error('Error playing sound:', error);
-              }
-              if (isMountedRef.current) {
-                isPlayingRef.current = false;
-              }
-            });
-        }
+        playAudio();
       }, effectiveDelay);
     } else {
       // Play immediately if no delay
-      audioRef.current.currentTime = 0;
-      
-      const playPromise = audioRef.current.play();
-      
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            if (isMountedRef.current) {
-              isPlayingRef.current = true;
-            }
-          })
-          .catch(error => {
-            if (error.name !== 'AbortError' && isMountedRef.current) {
-              console.error('Error playing sound:', error);
-            }
-            if (isMountedRef.current) {
-              isPlayingRef.current = false;
-            }
-          });
-      }
+      playAudio();
     }
   };
 

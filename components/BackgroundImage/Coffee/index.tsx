@@ -2,7 +2,7 @@ import Shape, { ShapeType } from "@/components/BackgroundImage/Shape";
 import { useAppContext } from "@/lib/hooks";
 import { changeModal } from "@/lib/context/ actions";
 import mug from '@/assets/sounds/mug.mp3';
-import Modal from "@/components/Modal";
+import Modal from "@/components/UI/Modal";
 import CoffeeMachine, { type CoffeeMachineRef, type HandleStateChange } from "@/components/CoffeeMachine";
 import { useRef, useState } from "react";
 import Mug from "@/components/CoffeeMachine/Mug";
@@ -34,7 +34,7 @@ export const MarkerCoffee = () => {
     }
     return <>
     <Modal handleClose={() => coffeMachineRef.current?.resetGame({gameState: 'OFF'})} name="coffee">
-        <div className="grid grid-cols-[3fr_5fr] w-full h-full md:grid-cols-[3fr_5fr] grid-cols-1 overflow-auto">
+        <div className="grid w-full h-full md:grid-cols-[3fr_5fr] grid-cols-1 overflow-auto">
             <div className="flex flex-col items-center text-center">
                 <h2 className="text-4xl font-bold mb-4">Coffee Break?</h2>
                 <p className="text-base">Time for a quick game!</p>
@@ -46,7 +46,7 @@ export const MarkerCoffee = () => {
               
                
                 {gameState.gameState === 'END' && (
-                    <div className="mt-12 mb-4 flex flex-col items-center max-h-[50vh] overflow-y-auto">
+                    <div className="mt-12 mb-4 flex flex-col items-center max-h-[50vh]">
                          <div className="relative cursor-pointer w-[90px] h-[90px]">
                         <div className="w-[90px] h-[90px] left-[36px] absolute">
                             <Mug onClickOnMug={() => coffeMachineRef.current?.resetGame({gameState: 'PAUSED',shouldGetNewObjective:true})} coffeeHeight={gameState.coffeeHeight/100} />

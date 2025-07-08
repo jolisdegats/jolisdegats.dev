@@ -50,15 +50,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.className} ${playfair.className} antialiased`}>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+      </head>
       <body>
-      <AppProvider>
-        <main className="w-screen h-screen overflow-hidden">
-    {children}
-    <div id="portal-root" />
-    <div className='z-[-10] absolute top-0 left-0 w-screen h-screen'>
-    </div>
-    </main>
-    </AppProvider>
+        <AppProvider>
+          <main className="w-svw h-svh">
+            {children}
+            <div id="portal-root" />
+            <div className='z-[-10] absolute top-0 left-0 w-svw h-svh'>
+            </div>
+          </main>
+        </AppProvider>
       </body>
     </html>
   );
