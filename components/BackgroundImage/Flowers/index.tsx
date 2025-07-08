@@ -10,9 +10,10 @@ const MarkerFlowers: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { dispatch } = useAppContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalAnimationComplete, setIsModalAnimationComplete] = useState(false);
   
   useEffect(() => {
-    if (!canvasRef.current || !containerRef.current || !isModalOpen) return;
+    if (!canvasRef.current || !containerRef.current || !isModalAnimationComplete) return;
     
     const canvas = canvasRef.current
     const pointer = {
@@ -142,7 +143,7 @@ const MarkerFlowers: React.FC = () => {
       window.removeEventListener('resize', handleResize);
       canvas.removeEventListener('click', handleClick);
     };
-  }, [isModalOpen]);
+  }, [isModalAnimationComplete]);
 
   const shape: ShapeType = {
     type: 'polygon',
@@ -163,7 +164,14 @@ const MarkerFlowers: React.FC = () => {
 
   return (
     <>
-      <Modal name="flowers" handleClose={() => setIsModalOpen(false)}>
+      <Modal 
+        name="flowers" 
+        handleClose={() => {
+          setIsModalOpen(false);
+          setIsModalAnimationComplete(false);
+        }}
+        onAnimationComplete={() => setIsModalAnimationComplete(true)}
+      >
         <div ref={containerRef} className="top-0 left-0 w-full h-screen flex flex-col-reverse items-start">
           <canvas ref={canvasRef} />
         </div>

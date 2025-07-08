@@ -7,9 +7,10 @@ type ModalProps = {
   children: ReactNode;
   handleClose?: () => void;
   name: string;
+  onAnimationComplete?: () => void;
 };
 
-const Modal = ({ children, handleClose, name }: ModalProps) => {
+const Modal = ({ children, handleClose, name, onAnimationComplete }: ModalProps) => {
   const { state: { modalOpen }, dispatch } = useAppContext();
   const modalRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -36,8 +37,13 @@ const Modal = ({ children, handleClose, name }: ModalProps) => {
     if (modalOpen.name === name) {
       setIsVisible(true);
       setIsAnimating(false);
+      if (onAnimationComplete) {
+        setTimeout(() => {
+          onAnimationComplete();
+        }, 300); // Match animation duration
+      }
     }
-  }, [modalOpen.name, name]);
+  }, [modalOpen.name, name, onAnimationComplete]);
 
   useEffect(() => {
     const closeOnEscapeKey = (e: KeyboardEvent) => e.key === 'Escape' ? onCloseModal() : null;
