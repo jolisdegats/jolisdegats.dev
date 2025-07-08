@@ -170,7 +170,7 @@ const CoffeeMachine = forwardRef<CoffeeMachineRef, CoffeeMachineProps>(({ handle
 
   return (
     <div className="w-full max-h-full mx-auto">
-      <div className="max-w-[450px] w-full mx-auto my-[20px] p-[20px]">
+      <div className="max-w-[450px] w-full mx-auto my-[20px] lg:p-[20px]">
         <div className="w-[88%] h-[100px] mx-auto bg-[#e4e8e9] rounded-[10px] relative shadow-[inset_10px_0px_2px_#d4d4d4,inset_-10px_0px_2px_#d4d8d9]">
           <button 
             onClick={handleBtnCoffee}
