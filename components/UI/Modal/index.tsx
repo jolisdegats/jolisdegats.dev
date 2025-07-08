@@ -74,7 +74,7 @@ const Modal = ({ children, handleClose, name, onAnimationComplete }: ModalProps)
               X
             </button>
           </div>
-          <div className="w-full px-5 lg:px-10 pb-10 pt-0 overflow-hidden flex flex-col">
+          <div className="w-full px-5 lg:px-10 pb-10 pt-0 overflow-hidden flex flex-col grow">
             {children}
           </div>
         </div>

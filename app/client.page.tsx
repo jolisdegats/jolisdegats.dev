@@ -57,7 +57,7 @@ const ClientPage = () => {
     return (
         <div 
             ref={scrollContainerRef}
-            className="relative w-svw h-svh overflow-x-auto overflow-y-hidden"
+            className="relative w-svw h-svh overflow-x-auto lg:overflow-x-hidden overflow-y-hidden"
             style={{ scrollBehavior: 'smooth' }}
         >
             <div 
