@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { Suspense, useCallback, useMemo } from 'react';
 
 import imageUrl from '@/assets/main-background.webp';
+import imageUrlMobile from '@/assets/main-background_compressed.webp';
 import gifCode from '@/assets/gif-code.webp';
 import cloud1 from '@/assets/cloud1.webp';
 import cloud2 from '@/assets/cloud2.webp';
@@ -54,7 +55,6 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
         alt="sky" 
         fill 
         className='object-cover'
-        quality={75}
       />
       <Image 
         priority 
@@ -62,7 +62,6 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
         alt="sea" 
         fill 
         className='object-cover'
-        quality={75}
       />
       <Image 
         priority 
@@ -70,7 +69,6 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
         alt="seaclouds" 
         fill 
         className='object-cover'
-        quality={75}
       />
 
       {/* Animated clouds */}
@@ -128,17 +126,28 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
         </Suspense>
       </svg>
 
-      {/* Main background image */}
+      {/* Main background image - Desktop */}
       <Image 
         placeholder='blur' 
         priority 
         src={imageUrl} 
         alt="imageUrl" 
         fill 
-        className='object-cover' 
+        className='object-cover hidden sm:block' 
         onLoad={() => onLoad(false)}
         sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 100vw"
-        quality={75}
+      />
+
+      {/* Main background image - Mobile */}
+      <Image 
+        placeholder='blur' 
+        priority 
+        src={imageUrlMobile} 
+        alt="imageUrlMobile" 
+        fill 
+        className='object-cover block sm:hidden' 
+        onLoad={() => onLoad(false)}
+        sizes="(max-width: 640px) 640px, 100vw"
       />
 
       <LazyImage 
