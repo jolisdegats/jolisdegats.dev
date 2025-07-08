@@ -46,12 +46,11 @@ a:hover {
   text-shadow: 0 0 8px rgba(97, 218, 251, 0.5);
 }
 
-/* Replace the scrollbar styles with: */
+/* Optimize animations for better performance */
 * {
   scrollbar-width: thin;
   scrollbar-color: black transparent;
 }
-
 
 *::-webkit-scrollbar-track {
   background: transparent;
@@ -65,7 +64,12 @@ a:hover {
   -webkit-appearance: none;
 }
 
-/* Disable default scrollbar appearance */
 *::-webkit-scrollbar-thumb:vertical {
   -webkit-appearance: none;
+}
+
+/* Performance optimizations for animations */
+.animate-cloud {
+  will-change: transform;
+  transform: translateZ(0);
 }

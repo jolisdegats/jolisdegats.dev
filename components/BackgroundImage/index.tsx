@@ -59,7 +59,7 @@ const BackgroundImage = () => {
       <Background onLoad={setIsBgLoading} />
       {!isBgLoading && (
         <svg
-          className="flex justify-center items-center h-screen"
+          className="absolute top-0 left-0 w-full h-full"
           width="100%"
           height="100%"
           preserveAspectRatio="xMidYMid slice"

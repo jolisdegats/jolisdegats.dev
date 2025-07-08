@@ -74,7 +74,17 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
       />
 
       {/* Animated clouds */}
-      <svg width="100%" height="100%" style={{ position: 'absolute', top: 0, left: 0 }}>
+      <svg 
+        width="100%" 
+        height="100%" 
+        style={{ 
+          position: 'absolute', 
+          top: 0, 
+          left: 0,
+          willChange: 'transform',
+          transform: 'translateZ(0)',
+        }}
+      >
         <Suspense fallback={null}>
           <motion.image
             href={seaclouds.src}
@@ -89,6 +99,9 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
               duration: 500,
               ease: 'linear',
               repeat: Infinity,
+            }}
+            style={{
+              willChange: 'transform',
             }}
           />
           {cloudAnimations.map(({ key, href, id, duration }) => (
@@ -106,6 +119,9 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
                 duration,
                 ease: 'linear',
                 repeat: Infinity,
+              }}
+              style={{
+                willChange: 'transform',
               }}
             />
           ))}
