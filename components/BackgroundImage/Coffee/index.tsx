@@ -2,7 +2,7 @@ import Shape, { ShapeType } from "@/components/BackgroundImage/Shape";
 import { useAppContext } from "@/lib/hooks";
 import { changeModal } from "@/lib/context/ actions";
 import mug from '@/assets/sounds/mug.mp3';
-import Modal from "@/components/UI/Modal";
+import PopupModal from "@/components/UI/Modal/PopupModal";
 import CoffeeMachine, { type CoffeeMachineRef, type HandleStateChange } from "@/components/CoffeeMachine";
 import { useRef, useState } from "react";
 import Mug from "@/components/CoffeeMachine/Mug";
@@ -33,7 +33,7 @@ export const MarkerCoffee = () => {
         height:43.39601139601143 
     }
     return <>
-    <Modal handleClose={() => coffeMachineRef.current?.resetGame({gameState: 'OFF'})} name="coffee">
+    <PopupModal handleClose={() => coffeMachineRef.current?.resetGame({gameState: 'OFF'})} name="coffee">
         <div className="grid w-full h-full md:grid-cols-[3fr_5fr] grid-cols-1 overflow-auto">
             <div className="flex flex-col items-center text-center">
                 <h2 className="text-4xl font-bold mb-4">Coffee Break?</h2>
@@ -65,7 +65,7 @@ export const MarkerCoffee = () => {
             <CoffeeMachine ref={coffeMachineRef} handleStateChange={handleStateChange} hideControls/>
             </div>
         </div>
-    </Modal>
+    </PopupModal>
     <Shape shape={shape} index="phone"/>
     </>
 }

@@ -27,7 +27,7 @@ const ImageComponents = {
   Cat: dynamic(() => import('@/components/BackgroundImage/Cat').then(mod => ({ default: mod.ImageCat }))),
   Radio: dynamic(() => import('@/components/BackgroundImage/Radio').then(mod => ({ default: mod.ImageRadio })), { ssr: false }),
   Phone: dynamic(() => import('@/components/BackgroundImage/Phone').then(mod => ({ default: mod.ImagePhone })), { ssr: false }),
-  Light: dynamic(() => import('@/components/BackgroundImage/Light').then(mod => ({ default: mod.ImageLight })), { ssr: false })
+  Light: dynamic(() => import('@/components/BackgroundImage/Light').then(mod => ({ default: mod.ImageLight })), { ssr: false }),
 };
 
 const MarkerComponents = {
@@ -38,7 +38,8 @@ const MarkerComponents = {
   Flowers: dynamic(() => import('@/components/BackgroundImage/Flowers'), { ssr: false }),
   Me: dynamic(() => import('@/components/BackgroundImage/Me').then(mod => ({ default: mod.MarkerMe })), { ssr: false }),
   Cat: dynamic(() => import('@/components/BackgroundImage/Cat').then(mod => ({ default: mod.MarkerCat })), { ssr: false }),
-  Computer: dynamic(() => import('@/components/BackgroundImage/Computer'),{ ssr: false })
+  Computer: dynamic(() => import('@/components/BackgroundImage/Computer'),{ ssr: false }),
+  VideoGames: dynamic(() => import('@/components/BackgroundImage/VideoGames').then(mod => ({ default: mod.MarkerVideoGames })), { ssr: false }),
 };
 
 const BackgroundImage = () => {
@@ -59,6 +60,7 @@ const BackgroundImage = () => {
         ))}
       </Head>
       <Background onLoad={setIsBgLoading} />
+      <div id="bubble-portal"/>
       {!isBgLoading && (
         <svg
           className="absolute top-0 left-0 w-full h-full"

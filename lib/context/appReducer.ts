@@ -17,6 +17,8 @@ const appReducer = (state: AppState, action: Action): AppState => {
           return { ...state, modalOpen: action.payload };
       case 'TOGGLE_FRIDGE':
           return { ...state, isFridgeOpen: !state.isFridgeOpen };
+      case 'TOGGLE_VIDEO_GAMES_BUBBLE':
+          return { ...state, isVideoGamesBubbleOn: !state.isVideoGamesBubbleOn };
     default:
       return state;
   }

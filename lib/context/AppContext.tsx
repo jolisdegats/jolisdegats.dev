@@ -9,6 +9,7 @@ export interface AppState {
   isLightOn: boolean;
   isPhoneOn: boolean;
   isFridgeOpen: boolean;
+  isVideoGamesBubbleOn: boolean;
   modalOpen: {
     name: string | null;
   };
@@ -25,6 +26,7 @@ const initialState: AppState = {
   isRadioOn: false,
   isLightOn: false,
   isPhoneOn: false,
+  isVideoGamesBubbleOn: false,
   isFridgeOpen: false,
   modalOpen: {name : null},
 }
