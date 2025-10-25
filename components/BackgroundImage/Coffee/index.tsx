@@ -1,6 +1,6 @@
 import Shape, { ShapeType } from "@/components/BackgroundImage/Shape";
 import { useAppContext } from "@/lib/hooks";
-import { changeModal } from "@/lib/context/ actions";
+import { changeModal } from "@/lib/context";
 import mug from '@/assets/sounds/mug.mp3';
 import PopupModal from "@/components/UI/Modal/PopupModal";
 import CoffeeMachine, { type CoffeeMachineRef, type HandleStateChange } from "@/components/CoffeeMachine";

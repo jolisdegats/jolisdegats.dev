@@ -85,7 +85,7 @@ const CoffeeMachine = forwardRef<CoffeeMachineRef, CoffeeMachineProps>(({ handle
       playCoffeeMachineOnOff();
     }
     resetGame({gameState: 'OFF'});
-    setGameState('OFF');}
+    }
   }, [gameState, playCoffeeMachineOnOff, resetGame]);
 
   const handleBtnOn = useCallback(() => {

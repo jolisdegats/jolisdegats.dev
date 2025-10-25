@@ -17,7 +17,7 @@ interface LazyImageProps {
   src: string | StaticImageData;
   alt: string;
   unoptimized?: boolean;
-  [key: string]: any;
+  [key: string]: string | StaticImageData | boolean | undefined;
 }
 
 const getRandomDuration = () => {
