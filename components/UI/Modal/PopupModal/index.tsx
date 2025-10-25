@@ -64,7 +64,7 @@ const PopupModal = ({ children, name, handleClose, onAnimationComplete}: PopupMo
         onClick={handleOutsideClick}
       >
         <div
-            className={`flex flex-col items-center justify-start bg-[#1b1d23] rounded-[10px] text-white overflow-hidden md:w-[90%] md:h-auto h-full max-w-[1000px] ${
+            className={`flex flex-col items-center justify-start bg-[#1b1d23] rounded-[10px] text-white overflow-hidden w-full md:w-[90%] md:h-auto h-full max-w-[1000px] ${
             isAnimating ? 'modal-content-exit' : 'modal-content-enter'
           }`}
         >
