@@ -58,7 +58,7 @@ export default function RootLayout({
           <main className="w-svw h-svh">
             {children}
             <div id="portal-root" />
-            <div className='z-[-10] absolute top-0 left-0 w-svw h-svh'>
+            <div className='z-[-50] absolute top-0 left-0 w-svw h-svh bg-bg-dark'>
             </div>
           </main>
         </AppProvider>

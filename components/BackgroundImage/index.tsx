@@ -4,7 +4,7 @@ import { Suspense, useState } from 'react';
 
 // Dynamically import components
 const Background = dynamic(() => import('@/components/BackgroundImage/Background'), {
-  loading: () => <div className="w-full h-screen bg-gray-100" />,
+  loading: () => <div className="w-full h-screen bg-bg-dark" />,
   ssr: false
 });
 
