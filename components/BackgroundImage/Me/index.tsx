@@ -1,10 +1,10 @@
 import Shape, { ShapeType } from "@/components/BackgroundImage/Shape";
 import { useAppContext } from "@/lib/hooks";
 import { changeModal } from "@/lib/context/ actions";
-import Modal from "@/components/UI/Modal";
 import Image from "next/image";
 import avatar from "@/assets/avatar.webp";
 import Head from "next/head";
+import PopupModal from "@/components/UI/Modal/PopupModal";
 
 export const MarkerMe = () => {
     const { dispatch } = useAppContext(); 
@@ -23,7 +23,7 @@ export const MarkerMe = () => {
     <Head>
     <link rel="preload" href={avatar.src} as="image" type="image/webp"/>
     </Head>
-    <Modal name="me">
+    <PopupModal name="me">
        <div className="max-h-[80vh] overflow-auto p-4">
          <div className="flex flex-col lg:flex-row items-center gap-8 h-full">
            <div className="text-white w-full lg:w-1/2 order-1 lg:order-1">
@@ -45,7 +45,7 @@ export const MarkerMe = () => {
            </div>
          </div>
        </div>
-    </Modal>
+    </PopupModal>
     <Shape shape={shape} index="me"/>
     </>
 }

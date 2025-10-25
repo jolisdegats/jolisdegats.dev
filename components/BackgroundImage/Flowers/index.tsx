@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import Modal from '@/components/UI/Modal';
+import PopupModal from '@/components/UI/Modal/PopupModal';
 import Shape, { type ShapeType } from '@/components/BackgroundImage/Shape';
 import { changeModal } from '@/lib/context';
 import { useAppContext } from '@/lib/hooks';
@@ -164,7 +164,7 @@ const MarkerFlowers: React.FC = () => {
 
   return (
     <>
-      <Modal 
+      <PopupModal 
         name="flowers" 
         handleClose={() => {
           setIsModalOpen(false);
@@ -175,7 +175,7 @@ const MarkerFlowers: React.FC = () => {
         <div ref={containerRef} className="top-0 left-0 w-full h-screen flex flex-col-reverse items-start">
           <canvas ref={canvasRef} />
         </div>
-      </Modal>
+      </PopupModal>
       <Shape shape={shape} index="flowers" />
     </>
   );

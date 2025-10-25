@@ -53,7 +53,7 @@ const Shape = ({ shape, index }: ShapeLinkProps) => {
   const markerY = shape.type === 'rectangle' 
     ? shape.y + shape.height / 2 
     : getPolygonCenter(shape.points).y;
-
+    
   return (
     <a className="cursor-pointer" key={index} target={shape.href?.startsWith('http') ? "_blank" : "_self"} {...shape} style={{zIndex : 10, ...shape.style}}>
       <g>
@@ -89,7 +89,7 @@ const Shape = ({ shape, index }: ShapeLinkProps) => {
   );
 };
 
-function getPolygonCenter(points: string) {
+export function getPolygonCenter(points: string) {
   const coordinates = points.split(' ').map(Number);
   let sumX = 0, sumY = 0;
   for (let i = 0; i < coordinates.length; i += 2) {

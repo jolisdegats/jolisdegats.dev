@@ -1,8 +1,8 @@
-import Modal from "@/components/UI/Modal";
+import PopupModal from "@/components/UI/Modal/PopupModal";
 
 const Credits = () => {
     return (
-        <Modal name="credits">
+        <PopupModal name="credits">
             <h2 className="font-playfair text-5xl text-center mb-10 text-white shadow-[1px_1px_2px_rgba(0,0,0,0.1)]">Credits</h2>
 
             <div className="font-roboto text-[#e0e0e0] overflow-auto">
@@ -63,7 +63,7 @@ const Credits = () => {
             <footer className="text-center mt-8 font-roboto italic text-[#a0a0a0]">
                 <p>Thank you for visiting!</p>
             </footer>
-        </Modal>
+        </PopupModal>
     )
 }
 
