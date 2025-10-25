@@ -78,7 +78,7 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
   }, [imagesLoaded.mainBg, imagesLoaded.gifCode, imagesLoaded.gifTyping, hasNotified, onLoad]);
 
   return (
-    <div className='z-[-10] absolute top-0 left-0 w-full h-full opacity-0 transition-opacity duration-500' 
+    <div className='z-[-10] absolute top-0 left-0 w-full h-full transition-opacity duration-500' 
          style={{ opacity: imagesLoaded.mainBg && imagesLoaded.gifCode && imagesLoaded.gifTyping ? 1 : 0 }}>
       <Image 
         priority 
