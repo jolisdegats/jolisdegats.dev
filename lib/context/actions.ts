@@ -1,4 +1,4 @@
-type ToggleModalPayload = { name : string, parameters? : any}
+type ToggleModalPayload = { name : string, parameters? : Record<string, unknown>}
 
 export type Action =
   | { type: 'TOGGLE_RADIO' }

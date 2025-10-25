@@ -1,7 +1,6 @@
 import { useAppContext } from "@/lib/hooks";
 import Shape from "@/components/BackgroundImage/Shape";
 import type { ShapeType } from "@/components/BackgroundImage/Shape";
-import { useEffect } from "react";
 import { toggleFridge } from "@/lib/context";
 import fridgeOpen from '@/assets/fridge2.png';
 
@@ -9,14 +8,6 @@ import fridgeOpen from '@/assets/fridge2.png';
 const MarkerFridge = () => {
 
   const { state : {isFridgeOpen}, dispatch } = useAppContext();
-
-  useEffect(() => {
-    if(isFridgeOpen) {
-      console.log('fridge on');
-    } else {
-      console.log('fridge off');
-    }
-  }, [isFridgeOpen]);
 
     const shape : ShapeType = {
       onClick: () => dispatch(toggleFridge()),

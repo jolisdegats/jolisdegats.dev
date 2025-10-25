@@ -1,6 +1,7 @@
 'use client'
 import React, { createContext, useReducer } from 'react';
 import appReducer from './appReducer';
+import { Action } from './actions';
 
 
 export interface AppState {
@@ -17,7 +18,7 @@ export interface AppState {
 
 interface AppContextType {
   state: AppState;
-  dispatch: React.Dispatch<any>;
+  dispatch: React.Dispatch<Action>;
 }
 
 

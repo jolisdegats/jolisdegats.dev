@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 import Portal from '@/components/UI/Portal';
 import { useAppContext } from '@/lib/hooks';
 import { changeModal } from '@/lib/context';
@@ -13,7 +13,6 @@ type PopupModalProps =  {
 
 const PopupModal = ({ children, name, handleClose, onAnimationComplete}: PopupModalProps) => {
   const { state: { modalOpen }, dispatch } = useAppContext();
-        const modalRef = useRef<HTMLDivElement>(null);
         const [isVisible, setIsVisible] = useState(false);
         const [isAnimating, setIsAnimating] = useState(false);
       

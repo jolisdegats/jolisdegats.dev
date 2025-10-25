@@ -1,21 +1,6 @@
 'use client'
 import dynamic from 'next/dynamic';
 import { Suspense, useState } from 'react';
-import Head from 'next/head';
-import backgroundImage from '@/assets/main-background.webp';
-// import backgroundImageMobile from '@/assets/main-background-compressed.webp';
-import sky from '@/assets/sky.webp';
-import sea from '@/assets/sea.webp';
-import seaclouds from '@/assets/seaclouds.webp';
-
-
-const preloadImages = [
-  backgroundImage,
-  // backgroundImageMobile,
-  sky,
-  sea,
-  seaclouds
-];
 
 // Dynamically import components
 const Background = dynamic(() => import('@/components/BackgroundImage/Background'), {
@@ -47,18 +32,6 @@ const BackgroundImage = () => {
 
   return (
     <>
-      <Head>
-        {/* Preload only critical images */}
-        {preloadImages.map((image, index) => (
-          <link
-            key={index}
-            rel="preload"
-            href={image.src}
-            as="image"
-            type="image/webp"
-          />
-        ))}
-      </Head>
       <Background onLoad={setIsBgLoading} />
       <div id="bubble-portal"/>
       {!isBgLoading && (
@@ -97,5 +70,7 @@ const BackgroundImage = () => {
     </>
   );
 };
+
+BackgroundImage.displayName = 'BackgroundImage';
 
 export default BackgroundImage;

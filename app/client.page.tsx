@@ -13,6 +13,8 @@ const ClientPage = () => {
     const { dispatch } = useAppContext();
     const isDesktop = useIsDesktop();
     const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const touchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const mouseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     
     const aspectRatio = 2688 / 1792;
     const minWidthVh = !isDesktop ? `${aspectRatio * 100}vh` : '100vw';
@@ -51,6 +53,8 @@ const ClientPage = () => {
         return () => {
             window.removeEventListener('resize', handleResize);
             window.removeEventListener('load', handleLoad);
+            if (touchTimeoutRef.current) clearTimeout(touchTimeoutRef.current);
+            if (mouseTimeoutRef.current) clearTimeout(mouseTimeoutRef.current);
         };
     }, []);
     
@@ -71,9 +75,15 @@ const ClientPage = () => {
                 <div className="fixed bottom-5 right-5 flex space-x-1">
                     <button 
                         onTouchStart={() => dispatch(toggleHelpMarkers())}
-                        onTouchEnd={() => setTimeout(() => dispatch(toggleHelpMarkers()), 300)}
+                        onTouchEnd={() => {
+                            if (touchTimeoutRef.current) clearTimeout(touchTimeoutRef.current);
+                            touchTimeoutRef.current = setTimeout(() => dispatch(toggleHelpMarkers()), 300);
+                        }}
                         onMouseDown={() => dispatch(toggleHelpMarkers())}
-                        onMouseUp={() => setTimeout(() => dispatch(toggleHelpMarkers()), 300)}
+                        onMouseUp={() => {
+                            if (mouseTimeoutRef.current) clearTimeout(mouseTimeoutRef.current);
+                            mouseTimeoutRef.current = setTimeout(() => dispatch(toggleHelpMarkers()), 300);
+                        }}
                         className="bg-white hover:bg-opacity-30 bg-opacity-0 rounded-md p-1.5 cursor-pointer text-white text-opacity-30 hover:text-opacity-100"
                     >
                         <FaQuestionCircle className="text-xl " title="Help" />

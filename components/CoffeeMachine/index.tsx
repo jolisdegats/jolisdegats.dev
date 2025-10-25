@@ -32,8 +32,8 @@ interface ResetGameParams {
 }
 
 const CoffeeMachine = forwardRef<CoffeeMachineRef, CoffeeMachineProps>(({ handleStateChange, hideControls = false }, ref) => {
-  const coffeeRef = useRef<HTMLDivElement>(null);
-  const mugRef = useRef<HTMLDivElement>(null);
+  const coffeeRef = useRef<HTMLDivElement | null>(null);
+  const mugRef = useRef<HTMLDivElement | null>(null);
   const {play: playCoffeeMachineOnOff} = useSoundEffect(coffeeMachineOnOff);
   const {play: playCoffeePouring, stop: stopCoffeePouringSound} = useSoundEffect(coffeePouring);
   const {play: playCoffeePouringEnd} = useSoundEffect(coffeePouringEnd);
@@ -85,7 +85,7 @@ const CoffeeMachine = forwardRef<CoffeeMachineRef, CoffeeMachineProps>(({ handle
       playCoffeeMachineOnOff();
     }
     resetGame({gameState: 'OFF'});
-    setGameState('OFF');}
+    }
   }, [gameState, playCoffeeMachineOnOff, resetGame]);
 
   const handleBtnOn = useCallback(() => {
@@ -229,10 +229,9 @@ const CoffeeMachine = forwardRef<CoffeeMachineRef, CoffeeMachineProps>(({ handle
           <div className="absolute left-1/2 bottom-[5px]">
             {!['END', 'OFF'].includes(gameState) && (
               <Mug 
+                ref={mugRef}
                 coffeeHeight={coffeeHeight} 
                 onClickOnMug={handleMugClick} 
-                mugRef={mugRef} 
-                coffeeRef={coffeeRef} 
                 gameState={gameState}
               />
             )}

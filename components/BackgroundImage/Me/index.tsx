@@ -1,9 +1,8 @@
 import Shape, { ShapeType } from "@/components/BackgroundImage/Shape";
 import { useAppContext } from "@/lib/hooks";
-import { changeModal } from "@/lib/context/ actions";
+import { changeModal } from "@/lib/context";
 import Image from "next/image";
 import avatar from "@/assets/avatar.webp";
-import Head from "next/head";
 import PopupModal from "@/components/UI/Modal/PopupModal";
 
 export const MarkerMe = () => {
@@ -20,9 +19,6 @@ export const MarkerMe = () => {
         points: "1284.01 964.923 1268.7 998.108 1243.17 1021.08 1222.75 1003.21 1284.01 852.604 1296.77 732.627 1340.17 704.547 1391.23 717.311 1416.75 793.892 1455.04 890.895 1480.57 993.003 1480.57 1164.03 1439.73 1215.09 1406.54 1240.62 1335.07 1250.83 1337.62 1317.2 1465.25 1301.88 1447.38 1414.2 1337.62 1358.04 1271.25 1426.96 1266.14 1350.38 1235.51 1337.62 1179.35 1360.59 1187.01 1317.2 1209.98 1263.59 1171.69 1100.22 1255.93 1092.56",
     }
     return <>
-    <Head>
-    <link rel="preload" href={avatar.src} as="image" type="image/webp"/>
-    </Head>
     <PopupModal name="me">
        <div className="max-h-[80vh] overflow-auto p-4">
          <div className="flex flex-col lg:flex-row items-center gap-8 h-full">
