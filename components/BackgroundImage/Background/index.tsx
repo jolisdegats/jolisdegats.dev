@@ -1,5 +1,5 @@
 import Image, { StaticImageData } from 'next/image';
-import { Suspense, useMemo } from 'react';
+import { Suspense, useMemo, useState, useCallback, useEffect } from 'react';
 
 import imageUrl from '@/assets/main-background.webp';
 import gifCode from '@/assets/gif-code.webp';
@@ -39,6 +39,12 @@ const LazyImage = ({ src, alt, unoptimized, ...props }: LazyImageProps) => (
 );
 
 const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
+  const [imagesLoaded, setImagesLoaded] = useState({
+    mainBg: false,
+    gifCode: false,
+    gifTyping: false,
+  });
+  const [hasNotified, setHasNotified] = useState(false);
 
   const cloudImages = useMemo(() => [cloud1, cloud2, cloud3, cloud4, cloud5], []);
 
@@ -51,9 +57,29 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
       animationDelay: getRandomAnimationDelay(),
     })), [cloudImages]);
 
+  // Check if all critical images have loaded
+  const handleMainBgLoad = useCallback(() => {
+    setImagesLoaded(prev => ({ ...prev, mainBg: true }));
+  }, []);
+
+  const handleGifCodeLoad = useCallback(() => {
+    setImagesLoaded(prev => ({ ...prev, gifCode: true }));
+  }, []);
+
+  const handleGifTypingLoad = useCallback(() => {
+    setImagesLoaded(prev => ({ ...prev, gifTyping: true }));
+  }, []);
+
+  useEffect(() => {
+    if (imagesLoaded.mainBg && imagesLoaded.gifCode && imagesLoaded.gifTyping && !hasNotified) {
+      onLoad(false);
+      setHasNotified(true);
+    }
+  }, [imagesLoaded.mainBg, imagesLoaded.gifCode, imagesLoaded.gifTyping, hasNotified, onLoad]);
+
   return (
-    <div className='z-[-10] absolute top-0 left-0 w-full h-full'>
-      {/* Critical images with priority loading */}
+    <div className='z-[-10] absolute top-0 left-0 w-full h-full opacity-0 transition-opacity duration-500' 
+         style={{ opacity: imagesLoaded.mainBg && imagesLoaded.gifCode && imagesLoaded.gifTyping ? 1 : 0 }}>
       <Image 
         priority 
         src={sky} 
@@ -76,7 +102,7 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
         className='object-cover'
       />
 
-      {/* Animated clouds */}
+
       <svg 
         width="100%" 
         height="100%" 
@@ -104,33 +130,35 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
         </Suspense>
       </svg>
 
-      {/* Main background image - Desktop */}
       <Image 
         placeholder='blur' 
         priority 
         src={imageUrl} 
-        alt="imageUrl" 
+        alt="main background" 
         fill 
         className='object-cover' 
-        onLoad={() => onLoad(false)}
+        onLoad={handleMainBgLoad}
         sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 100vw"
       />
 
-<LazyImage 
+      <Image 
+        priority
         src={gifCode} 
-        alt="gifCode" 
+        alt="code animation" 
         fill 
         className='object-cover'
         unoptimized={true}
+        onLoad={handleGifCodeLoad}
       />
-<LazyImage 
+      <Image 
+        priority
         src={gifTyping} 
-        alt="gifTyping" 
+        alt="typing animation" 
         fill 
         className='object-cover'
         unoptimized={true}
+        onLoad={handleGifTypingLoad}
       />
- 
      
     </div>
   );
