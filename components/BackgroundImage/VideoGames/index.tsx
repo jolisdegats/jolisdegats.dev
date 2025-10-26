@@ -7,7 +7,7 @@ import BubbleModal from "@/components/UI/Modal/BubbleModal";
 import Image from "next/image";
 
 const VIDEO_GAMES_BUBBLE_SIZE = "30vw";
-const VIDEO_GAMES_BUBBLE_MAX_SIZE = "200px";
+const VIDEO_GAMES_BUBBLE_MAX_SIZE = "300px";
 
 export const MarkerVideoGames = () => {
     const { dispatch } = useAppContext(); 

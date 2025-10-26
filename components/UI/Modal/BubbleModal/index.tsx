@@ -73,7 +73,7 @@ const BubbleModal = ({
         isAnimating ? "modal-content-exit" : "modal-content-enter"
       }`}
     >
-      <div className="w-full px-5 lg:px-10 pb-10 pt-0 overflow-hidden flex flex-col grow">
+      <div className="w-full h-full px-5 lg:px-10 pb-10 pt-0 overflow-hidden">
         {children}
       </div>
     </div>
