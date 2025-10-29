@@ -15,7 +15,7 @@ import BelleEtLaBete from './images/belleetlabete.jpg';
 import TkkGSurLaPisteDesFauxMonnayeurs from './images/tkkg.jpg';
 import LesSims from './images/thesims.png';
 import DigimonWorld from './images/digimonworld.png';
-import RollerCoasterTycoon from './images/zelda.png';
+import RollerCoasterTycoon from './images/rollercoastertycoon.png';
 import MonsterHunter from './images/monsterhunter.png';
 import Syberia from './images/syberia.png';
 import DreamfallTheLongestJourney from './images/dreamfallthelongestjourney.png';
