@@ -51,6 +51,19 @@ const getCenterTranslationX = (index: number): number => {
   return MODAL_SIZE/2 - bookCenter;
 };
 
+// Helper function to get direction and starting preview index
+const getPreviewStartIndex = (keyCode: string, lastFocusedIndex: number): number => {
+  if (lastFocusedIndex === -1) {
+    return (keyCode === 'ArrowRight') ? 0 : books.length - 1;
+  }
+  
+  if (keyCode === 'ArrowLeft') {
+    return (lastFocusedIndex > 0) ? lastFocusedIndex - 1 : 0;
+  }
+  
+  return (lastFocusedIndex < books.length - 1) ? lastFocusedIndex + 1 : books.length - 1;
+};
+
 // Animation timings (in ms)
 const UNFOCUS_PHASE_1_DURATION = 300; 
 const UNFOCUS_PHASE_2_DURATION = 300;
@@ -142,15 +155,10 @@ const BookshelfContent = () => {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pendingClickRef = useRef<number | null>(null);
   const focusedIndexRef = useRef(-1);
-  const animationPhaseRef = useRef<AnimationPhase>('idle');
 
   useEffect(() => {
     focusedIndexRef.current = focusedIndex;
   }, [focusedIndex]);
-
-  useEffect(() => {
-    animationPhaseRef.current = animationPhase;
-  }, [animationPhase]);
 
   useEffect(() => {
     return () => {
@@ -219,7 +227,6 @@ const BookshelfContent = () => {
   const pressedKeysRef = useRef<Set<string>>(new Set());
   const hoverIndexRef = useRef(-1);
   const repeatIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const repeatTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const navigationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isInPreviewModeRef = useRef(false);
   const lastFocusedIndexRef = useRef(-1);
@@ -229,7 +236,6 @@ const BookshelfContent = () => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const keyCode = e.code;
 
-      // Only handle arrow keys and Escape
       if (!['ArrowLeft', 'ArrowRight', 'Space'].includes(keyCode)) {
         return;
       }
@@ -265,22 +271,10 @@ const BookshelfContent = () => {
         if (pressedKeysRef.current.has(keyCode)) {
           isInPreviewModeRef.current = true;
           
-          // Calculate the starting preview index (what would have been navigated to on short press)
-          let currentPreviewIndex = 0;
+          // Calculate the starting preview index using helper function
           const direction = (keyCode === 'ArrowRight') ? 1 : -1;
+          let currentPreviewIndex = getPreviewStartIndex(keyCode, lastFocusedIndexRef.current);
           
-          if (lastFocusedIndexRef.current === -1) {
-            // No book was focused, start from 0 for ArrowRight or last for ArrowLeft
-            currentPreviewIndex = (keyCode === 'ArrowRight') ? 0 : books.length - 1;
-          } else {
-            // A book was focused, calculate next index based on key
-            if (keyCode === 'ArrowLeft') {
-              currentPreviewIndex = (lastFocusedIndexRef.current > 0) ? lastFocusedIndexRef.current - 1 : 0;
-              } else if (keyCode === 'ArrowRight') {
-              currentPreviewIndex = (lastFocusedIndexRef.current < books.length - 1) ? lastFocusedIndexRef.current + 1 : books.length - 1;
-            }
-          }
-
           // Show the starting book's hover effect immediately
           setHoveredIndex(currentPreviewIndex);
           hoverIndexRef.current = currentPreviewIndex;
@@ -369,7 +363,6 @@ const BookshelfContent = () => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
       if (navigationTimeoutRef.current) clearTimeout(navigationTimeoutRef.current);
-      if (repeatTimeoutRef.current) clearTimeout(repeatTimeoutRef.current);
       if (repeatIntervalRef.current) clearInterval(repeatIntervalRef.current);
     };
   }, []);
