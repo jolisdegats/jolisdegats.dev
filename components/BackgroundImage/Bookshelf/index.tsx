@@ -5,27 +5,27 @@ import Shape, { ShapeType } from "@/components/BackgroundImage/Shape";
 import { changeModal } from "@/lib/context";
 import { useAppContext } from "@/lib/hooks";
 import BubbleModal from "@/components/UI/Modal/BubbleModal";
-import shelfImg from './images/shelf.png';
+import shelfImg from '@/assets/games/shelf.webp';
 import Image from "next/image";
-import BrokenSword from './images/brokensword.png';
-import Pharaon from './images/pharaon.png';
-import ToTheMoon from './images/tothemoon.png';
-import Zelda from './images/zelda.png';
-import BelleEtLaBete from './images/belleetlabete.jpg';
-import TkkGSurLaPisteDesFauxMonnayeurs from './images/tkkg.jpg';
-import LesSims from './images/thesims.png';
-import DigimonWorld from './images/digimonworld.png';
-import RollerCoasterTycoon from './images/rollercoastertycoon.png';
-import MonsterHunter from './images/monsterhunter.png';
-import Syberia from './images/syberia.png';
-import DreamfallTheLongestJourney from './images/dreamfallthelongestjourney.png';
-import Uncharted from './images/uncharted.png';
-import HeroesOfTheStorm from './images/heroesofthestorm.png';
-import DetroitBecomeHuman from './images/detroitbecomehuman.png';
-import HeavyRain from './images/heavyrain.png';
-import Expedition33 from './images/clairobscurexpedition33.png';
-import Spine from './images/spine.png';
-import CoverOverlay from './images/coveroverlay.png';
+import BrokenSword from '@/assets/games/brokensword.webp';
+import Pharaon from '@/assets/games/pharaon.webp';
+import ToTheMoon from '@/assets/games/tothemoon.webp';
+import Zelda from '@/assets/games/zelda.webp';
+import BelleEtLaBete from '@/assets/games/belleetlabete.webp';
+import TkkGSurLaPisteDesFauxMonnayeurs from '@/assets/games/tkkg.webp';
+import LesSims from '@/assets/games/thesims.webp';
+import DigimonWorld from '@/assets/games/digimonworld.webp';
+import RollerCoasterTycoon from '@/assets/games/rollercoastertycoon.webp';
+import MonsterHunter from '@/assets/games/monsterhunter.webp';
+import Syberia from '@/assets/games/syberia.webp';
+import DreamfallTheLongestJourney from '@/assets/games/dreamfallthelongestjourney.webp';
+import Uncharted from '@/assets/games/uncharted.webp';
+import HeroesOfTheStorm from '@/assets/games/heroesofthestorm.webp';
+import DetroitBecomeHuman from '@/assets/games/detroitbecomehuman.webp';
+import HeavyRain from '@/assets/games/heavyrain.webp';
+import Expedition33 from '@/assets/games/clairobscurexpedition33.webp';
+import Spine from '@/assets/games/spine.webp';
+import CoverOverlay from '@/assets/games/coveroverlay.webp';
 
 const MODAL_SIZE = 400;
 const BOOKS_LEFT_POSITION = 38;
@@ -36,22 +36,25 @@ const COVER_WIDTH = COVER_HEIGHT/3*2;
 const SPINE_WIDTH = 18;
 const NEGATIVE_MARGIN = COVER_WIDTH;
 
+const UNFOCUS_PHASE_1_DURATION = 300; 
+const UNFOCUS_PHASE_2_DURATION = 300;
+const FOCUS_ROTATION_DELAY = 200;
+const FOCUS_ROTATION_DURATION = 400;
 
-// Helper function to calculate book center position on shelf
+
+
 const getBookShelfPosition = (index: number): number => {
   const firstBookCenter = (SPINE_WIDTH / 3*2 + COVER_WIDTH) / 2;
   const offsetPerBook = SPINE_WIDTH;
-  // const correction = index * 3;
   return firstBookCenter + index * offsetPerBook + firstBookCenter/2;
 };
 
-// Helper function to calculate translation to center the focused book
 const getCenterTranslationX = (index: number): number => {
   const bookCenter = getBookShelfPosition(index);
   return MODAL_SIZE/2 - bookCenter;
 };
 
-// Helper function to get direction and starting preview index
+
 const getPreviewStartIndex = (keyCode: string, lastFocusedIndex: number): number => {
   if (lastFocusedIndex === -1) {
     return (keyCode === 'ArrowRight') ? 0 : books.length - 1;
@@ -64,18 +67,33 @@ const getPreviewStartIndex = (keyCode: string, lastFocusedIndex: number): number
   return (lastFocusedIndex < books.length - 1) ? lastFocusedIndex + 1 : books.length - 1;
 };
 
-// Animation timings (in ms)
-const UNFOCUS_PHASE_1_DURATION = 300; 
-const UNFOCUS_PHASE_2_DURATION = 300;
-const FOCUS_ROTATION_DELAY = 200;
-const FOCUS_ROTATION_DURATION = 400;
+const getNextNavigationIndex = (keyCode: string, currentFocusedIndex: number): number | 'unfocus' => {
+  if (currentFocusedIndex === -1) {
+    return (keyCode === 'ArrowRight') ? 0 : books.length - 1;
+  }
+  
+  if (keyCode === 'ArrowLeft') {
+    if (currentFocusedIndex > 0) {
+      return currentFocusedIndex - 1;
+    }
+    return 'unfocus';
+  }
+  
+  if (keyCode === 'ArrowRight') {
+    if (currentFocusedIndex < books.length - 1) {
+      return currentFocusedIndex + 1;
+    }
+    return 'unfocus';
+  }
+  
+  return -1;
+};
 
-interface IBook {
+
+const books: {
   title: string;
   coverUrl: string;
-}
-
-const books: IBook[] = [
+}[] = [
   {
     title: "La Belle et la Bête",
     coverUrl: BelleEtLaBete.src,
@@ -170,18 +188,12 @@ const BookshelfContent = () => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
     if (focusedIndexRef.current === index) {
-      // Start unfocusing animation sequence
-      // Phase 1: Translate back to shelf position (left + up) while rotating back
       setAnimationPhase('unfocusing-rotate-and-translate');
       timeoutRef.current = setTimeout(() => {
-        // Phase 2: Stay at shelf position (no more translation)
         setAnimationPhase('translate-back-to-shelf');
-        // Immediately set focusedIndex to -1 so pending clicks see correct state
         setFocusedIndex(-1);
         focusedIndexRef.current = -1;
-        // Store the last focused index before clearing it
         lastFocusedIndexRef.current = index;
-        // After phase 1 completes, process any pending click
         if (pendingClickRef.current !== null) {
           const pendingIndex = pendingClickRef.current;
           pendingClickRef.current = null;
@@ -195,26 +207,18 @@ const BookshelfContent = () => {
         }, UNFOCUS_PHASE_2_DURATION);
       }, UNFOCUS_PHASE_1_DURATION);
     } else {
-      // If a different book is focused and we're trying to focus this one,
-      // first queue it to unfocus the current one
       if (focusedIndexRef.current !== -1 && focusedIndexRef.current !== index) {
         pendingClickRef.current = index;
-        // Trigger unfocus of current focused book
         handleBookClick(focusedIndexRef.current);
         return;
       }
 
-      // Start focusing animation sequence
-      // Phase 1: Take book out (translate down + left) for 400ms
       setAnimationPhase('taking-out');
-      // Delay focusedIndex change slightly to allow transform transition to start
       timeoutRef.current = setTimeout(() => {
         setFocusedIndex(index);
         lastFocusedIndexRef.current = index;
-        // Phase 2: At 200ms, start rotating while still translating
         timeoutRef.current = setTimeout(() => {
           setAnimationPhase('rotating-while-taking-out');
-          // Phase 3: After 400ms total, translate to center
           timeoutRef.current = setTimeout(() => {
             setAnimationPhase('centering');
           }, FOCUS_ROTATION_DELAY);
@@ -223,7 +227,6 @@ const BookshelfContent = () => {
     }
   };
 
-  // Refs for keyboard handling (must be at component level)
   const pressedKeysRef = useRef<Set<string>>(new Set());
   const hoverIndexRef = useRef(-1);
   const repeatIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -231,7 +234,6 @@ const BookshelfContent = () => {
   const isInPreviewModeRef = useRef(false);
   const lastFocusedIndexRef = useRef(-1);
 
-  // Handle keyboard navigation with repeat functionality
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const keyCode = e.code;
@@ -240,7 +242,6 @@ const BookshelfContent = () => {
         return;
       }
 
-      // If key is already pressed, don't repeat
       if (pressedKeysRef.current.has(keyCode)) {
         return;
       }
@@ -249,40 +250,31 @@ const BookshelfContent = () => {
       pressedKeysRef.current.add(keyCode);
       isInPreviewModeRef.current = false;
 
-      // Clear any previous navigation timeout
       if (navigationTimeoutRef.current) clearTimeout(navigationTimeoutRef.current);
 
-      // Handle Escape key separately
       if (keyCode === 'Space') {
-        // If a book is focused, unfocus it
         if (lastFocusedIndexRef.current !== -1) {
           handleBookClick(lastFocusedIndexRef.current);
         } 
         return;
       }
 
-      // Immediately unfocus if a book is focused (for arrow keys only)
       if (focusedIndexRef.current !== -1) {
         handleBookClick(focusedIndexRef.current);
       }
 
-      // Wait 500ms to decide if it's a long press or short press
       navigationTimeoutRef.current = setTimeout(() => {
         if (pressedKeysRef.current.has(keyCode)) {
           isInPreviewModeRef.current = true;
           
-          // Calculate the starting preview index using helper function
           const direction = (keyCode === 'ArrowRight') ? 1 : -1;
           let currentPreviewIndex = getPreviewStartIndex(keyCode, lastFocusedIndexRef.current);
           
-          // Show the starting book's hover effect immediately
           setHoveredIndex(currentPreviewIndex);
           hoverIndexRef.current = currentPreviewIndex;
 
-          // Cycle through books every 400ms
           repeatIntervalRef.current = setInterval(() => {
             if (!pressedKeysRef.current.has(keyCode)) {
-              // Key was released, stop the interval
               if (repeatIntervalRef.current) {
                 clearInterval(repeatIntervalRef.current);
                 repeatIntervalRef.current = null;
@@ -290,13 +282,12 @@ const BookshelfContent = () => {
               return;
             }
 
-            // Move to next book in preview in the direction of the arrow, loop around
             currentPreviewIndex = (currentPreviewIndex + direction + books.length) % books.length;
             setHoveredIndex(currentPreviewIndex);
             hoverIndexRef.current = currentPreviewIndex;
-          }, 400);
+          }, 300);
         }
-      }, 500);
+      }, 300);
     };
 
     const handleKeyUp = (e: KeyboardEvent) => {
@@ -304,50 +295,24 @@ const BookshelfContent = () => {
       const wasPressed = pressedKeysRef.current.has(keyCode);
       pressedKeysRef.current.delete(keyCode);
 
-      // If key was released before 2 seconds (short press), navigate
       if (wasPressed && navigationTimeoutRef.current !== null && !isInPreviewModeRef.current) {
         clearTimeout(navigationTimeoutRef.current);
         navigationTimeoutRef.current = null;
 
-        // Execute navigation for short press
-        let nextIndex = -1;
+        const nextIndexOrUnfocus = getNextNavigationIndex(keyCode, focusedIndexRef.current);
         
-        if (focusedIndexRef.current === -1) {
-          if (keyCode === 'ArrowRight') {
-            nextIndex = 0;
-          } else if (keyCode === 'ArrowLeft') {
-            nextIndex = books.length - 1;
-          }
-        } else {
-          if (keyCode === 'ArrowLeft') {
-            if (focusedIndexRef.current > 0) {
-              nextIndex = focusedIndexRef.current - 1;
-            } else {
-              handleBookClick(focusedIndexRef.current);
-              return;
-            }
-          } else if (keyCode === 'ArrowRight') {
-            if (focusedIndexRef.current < books.length - 1) {
-              nextIndex = focusedIndexRef.current + 1;
-            } else {
-              handleBookClick(focusedIndexRef.current);
-              return;
-            }
-          }
-        }
-
-        if (nextIndex !== -1) {
-          handleBookClick(nextIndex);
+        if (nextIndexOrUnfocus === 'unfocus') {
+          handleBookClick(focusedIndexRef.current);
+        } else if (nextIndexOrUnfocus !== -1) {
+          handleBookClick(nextIndexOrUnfocus);
         }
       } else if (isInPreviewModeRef.current) {
-        // Long press ended - stop the preview loop
         isInPreviewModeRef.current = false;
         if (repeatIntervalRef.current) {
           clearInterval(repeatIntervalRef.current);
           repeatIntervalRef.current = null;
         }
         
-        // Focus the currently hovered book if one is hovered
         if (hoverIndexRef.current !== -1) {
           handleBookClick(hoverIndexRef.current);
           setHoveredIndex(-1);
@@ -473,9 +438,6 @@ const BookshelfContent = () => {
                 aria-hidden
                 className="pointer-events-none fixed top-0 left-0 z-50 h-full w-full opacity-40 [filter:url(#cover)]"
               />
-              {/* <h2 className="text-md m-auto text-xs mt-0" style={{ writingMode: "vertical-lr" }}>
-                {book.title}
-              </h2> */}
         </div>
 
             {/* Book Cover */}
@@ -504,14 +466,14 @@ const BookshelfContent = () => {
                 aria-hidden
                 className="pointer-events-none fixed top-0 right-0 z-50 h-full w-full opacity-40 [filter:url(#cover)]"
               />
-              {/* <span
+               <span
                 aria-hidden
                 className="pointer-events-none absolute top-0 left-0 z-40 h-full w-full"
                 style={{
                   background: `radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 30%, transparent 70%)`,
                 }}
-              /> */}
-              <img src={book.coverUrl} alt={book.title} className={`h-full bg-cover`} style={{ width: `${COVER_WIDTH}px`, padding: "12px 8px", paddingTop: "14px", filter: focusedIndex === index ? "brightness(100%)" : hoveredIndex === index ? "brightness(70%)" : "brightness(40%)", transition: "filter 0.3s ease-in-out"}} />
+              /> 
+              <Image src={book.coverUrl} alt={book.title} className={`h-full bg-cover`} width={COVER_WIDTH} height={COVER_HEIGHT} style={{ padding: "12px 8px", paddingTop: "14px", filter: focusedIndex === index ? "brightness(100%)" : hoveredIndex === index ? "brightness(70%)" : "brightness(40%)", transition: "filter 0.3s ease-in-out"}} />
               <div className="absolute top-0 left-0 w-full h-full" style={{ backgroundImage: `url(${CoverOverlay.src})`, backgroundSize: "100% 100%", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}></div>
             
       </div>
@@ -544,8 +506,8 @@ export const MarkerBookshelf = () => {
       name="bookshelf"
       width={`${MODAL_SIZE}px`}
       height={`${MODAL_SIZE}px`}
-      x="calc(30vw - 200px)"
-      y="calc(50vh - 200px)"
+      x={`calc(${(modalPosition?.x || 0)}px )`} 
+      y={`calc(${(modalPosition?.y || 0)}px - ${MODAL_SIZE}px - 30px)`}
     >
       <BookshelfContent />
     </BubbleModal>
