@@ -145,12 +145,6 @@ const BookshelfContent = () => {
   const animationPhaseRef = useRef<AnimationPhase>('idle');
 
   useEffect(() => {
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
-  }, []);
-
-  useEffect(() => {
     focusedIndexRef.current = focusedIndex;
   }, [focusedIndex]);
 
@@ -158,57 +152,11 @@ const BookshelfContent = () => {
     animationPhaseRef.current = animationPhase;
   }, [animationPhase]);
 
-  // Handle keyboard navigation
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      let nextIndex = -1;
-      
-      if (focusedIndex === -1) {
-        // No book focused: right arrow opens first, left arrow opens last
-        if (e.key === 'ArrowRight') {
-          nextIndex = 0;
-          e.preventDefault();
-        } else if (e.key === 'ArrowLeft') {
-          nextIndex = books.length - 1;
-          e.preventDefault();
-        }
-      } else {
-        // Book is focused: navigate between books or close
-        if (e.key === 'ArrowLeft') {
-          if (focusedIndex > 0) {
-            nextIndex = focusedIndex - 1;
-            e.preventDefault();
-          } else {
-            // On first book: unfocus instead of wrapping
-            handleBookClick(focusedIndex);
-            e.preventDefault();
-            return;
-          }
-        } else if (e.key === 'ArrowRight') {
-          if (focusedIndex < books.length - 1) {
-            nextIndex = focusedIndex + 1;
-            e.preventDefault();
-          } else {
-            // On last book: unfocus instead of wrapping
-            handleBookClick(focusedIndex);
-            e.preventDefault();
-            return;
-          }
-        } else if (e.key === 'Escape') {
-          handleBookClick(focusedIndex);
-          e.preventDefault();
-          return;
-        }
-      }
-
-      if (nextIndex !== -1) {
-        handleBookClick(nextIndex);
-      }
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [focusedIndex]);
+  }, []);
 
   const handleBookClick = (index: number) => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -222,6 +170,9 @@ const BookshelfContent = () => {
         setAnimationPhase('translate-back-to-shelf');
         // Immediately set focusedIndex to -1 so pending clicks see correct state
         setFocusedIndex(-1);
+        focusedIndexRef.current = -1;
+        // Store the last focused index before clearing it
+        lastFocusedIndexRef.current = index;
         // After phase 1 completes, process any pending click
         if (pendingClickRef.current !== null) {
           const pendingIndex = pendingClickRef.current;
@@ -251,6 +202,7 @@ const BookshelfContent = () => {
       // Delay focusedIndex change slightly to allow transform transition to start
       timeoutRef.current = setTimeout(() => {
         setFocusedIndex(index);
+        lastFocusedIndexRef.current = index;
         // Phase 2: At 200ms, start rotating while still translating
         timeoutRef.current = setTimeout(() => {
           setAnimationPhase('rotating-while-taking-out');
@@ -262,6 +214,165 @@ const BookshelfContent = () => {
       }, 0);
     }
   };
+
+  // Refs for keyboard handling (must be at component level)
+  const pressedKeysRef = useRef<Set<string>>(new Set());
+  const hoverIndexRef = useRef(-1);
+  const repeatIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const repeatTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const navigationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isInPreviewModeRef = useRef(false);
+  const lastFocusedIndexRef = useRef(-1);
+
+  // Handle keyboard navigation with repeat functionality
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const keyCode = e.code;
+
+      // Only handle arrow keys and Escape
+      if (!['ArrowLeft', 'ArrowRight', 'Space'].includes(keyCode)) {
+        return;
+      }
+
+      // If key is already pressed, don't repeat
+      if (pressedKeysRef.current.has(keyCode)) {
+        return;
+      }
+
+      e.preventDefault();
+      pressedKeysRef.current.add(keyCode);
+      isInPreviewModeRef.current = false;
+
+      // Clear any previous navigation timeout
+      if (navigationTimeoutRef.current) clearTimeout(navigationTimeoutRef.current);
+
+      // Handle Escape key separately
+      if (keyCode === 'Space') {
+        // If a book is focused, unfocus it
+        if (lastFocusedIndexRef.current !== -1) {
+          handleBookClick(lastFocusedIndexRef.current);
+        } 
+        return;
+      }
+
+      // Immediately unfocus if a book is focused (for arrow keys only)
+      if (focusedIndexRef.current !== -1) {
+        handleBookClick(focusedIndexRef.current);
+      }
+
+      // Wait 500ms to decide if it's a long press or short press
+      navigationTimeoutRef.current = setTimeout(() => {
+        if (pressedKeysRef.current.has(keyCode)) {
+          isInPreviewModeRef.current = true;
+          
+          // Calculate the starting preview index (what would have been navigated to on short press)
+          let currentPreviewIndex = 0;
+          const direction = (keyCode === 'ArrowRight') ? 1 : -1;
+          
+          if (lastFocusedIndexRef.current === -1) {
+            // No book was focused, start from 0 for ArrowRight or last for ArrowLeft
+            currentPreviewIndex = (keyCode === 'ArrowRight') ? 0 : books.length - 1;
+          } else {
+            // A book was focused, calculate next index based on key
+            if (keyCode === 'ArrowLeft') {
+              currentPreviewIndex = (lastFocusedIndexRef.current > 0) ? lastFocusedIndexRef.current - 1 : 0;
+              } else if (keyCode === 'ArrowRight') {
+              currentPreviewIndex = (lastFocusedIndexRef.current < books.length - 1) ? lastFocusedIndexRef.current + 1 : books.length - 1;
+            }
+          }
+
+          // Show the starting book's hover effect immediately
+          setHoveredIndex(currentPreviewIndex);
+          hoverIndexRef.current = currentPreviewIndex;
+
+          // Cycle through books every 400ms
+          repeatIntervalRef.current = setInterval(() => {
+            if (!pressedKeysRef.current.has(keyCode)) {
+              // Key was released, stop the interval
+              if (repeatIntervalRef.current) {
+                clearInterval(repeatIntervalRef.current);
+                repeatIntervalRef.current = null;
+              }
+              return;
+            }
+
+            // Move to next book in preview in the direction of the arrow, loop around
+            currentPreviewIndex = (currentPreviewIndex + direction + books.length) % books.length;
+            setHoveredIndex(currentPreviewIndex);
+            hoverIndexRef.current = currentPreviewIndex;
+          }, 400);
+        }
+      }, 500);
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      const keyCode = e.code;
+      const wasPressed = pressedKeysRef.current.has(keyCode);
+      pressedKeysRef.current.delete(keyCode);
+
+      // If key was released before 2 seconds (short press), navigate
+      if (wasPressed && navigationTimeoutRef.current !== null && !isInPreviewModeRef.current) {
+        clearTimeout(navigationTimeoutRef.current);
+        navigationTimeoutRef.current = null;
+
+        // Execute navigation for short press
+        let nextIndex = -1;
+        
+        if (focusedIndexRef.current === -1) {
+          if (keyCode === 'ArrowRight') {
+            nextIndex = 0;
+          } else if (keyCode === 'ArrowLeft') {
+            nextIndex = books.length - 1;
+          }
+        } else {
+          if (keyCode === 'ArrowLeft') {
+            if (focusedIndexRef.current > 0) {
+              nextIndex = focusedIndexRef.current - 1;
+            } else {
+              handleBookClick(focusedIndexRef.current);
+              return;
+            }
+          } else if (keyCode === 'ArrowRight') {
+            if (focusedIndexRef.current < books.length - 1) {
+              nextIndex = focusedIndexRef.current + 1;
+            } else {
+              handleBookClick(focusedIndexRef.current);
+              return;
+            }
+          }
+        }
+
+        if (nextIndex !== -1) {
+          handleBookClick(nextIndex);
+        }
+      } else if (isInPreviewModeRef.current) {
+        // Long press ended - stop the preview loop
+        isInPreviewModeRef.current = false;
+        if (repeatIntervalRef.current) {
+          clearInterval(repeatIntervalRef.current);
+          repeatIntervalRef.current = null;
+        }
+        
+        // Focus the currently hovered book if one is hovered
+        if (hoverIndexRef.current !== -1) {
+          handleBookClick(hoverIndexRef.current);
+          setHoveredIndex(-1);
+          hoverIndexRef.current = -1;
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+      if (navigationTimeoutRef.current) clearTimeout(navigationTimeoutRef.current);
+      if (repeatTimeoutRef.current) clearTimeout(repeatTimeoutRef.current);
+      if (repeatIntervalRef.current) clearInterval(repeatIntervalRef.current);
+    };
+  }, []);
 
   return (
     <>
