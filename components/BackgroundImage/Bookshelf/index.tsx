@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Shape, { ShapeType } from "@/components/BackgroundImage/Shape";
 import { changeModal } from "@/lib/context";
 import { useAppContext } from "@/lib/hooks";
@@ -31,8 +31,8 @@ import { RiSpace } from "react-icons/ri";
 import { FaLongArrowAltLeft, FaLongArrowAltRight } from "react-icons/fa";
 
 const MODAL_SIZE = 400;
-const BOOKS_LEFT_POSITION = 38;
-const BOOKS_TOP_POSITION = 72;
+const VIDEOGAMES_LEFT_POSITION = 38;
+const VIDEOGAMES_TOP_POSITION = 72;
 
 const COVER_HEIGHT = MODAL_SIZE/2;
 const COVER_WIDTH = COVER_HEIGHT/3*2;
@@ -45,55 +45,7 @@ const FOCUS_ROTATION_DELAY = 200;
 const FOCUS_ROTATION_DURATION = 400;
 
 
-
-const getBookShelfPosition = (index: number): number => {
-  const firstBookCenter = (SPINE_WIDTH / 3*2 + COVER_WIDTH) / 2;
-  const offsetPerBook = SPINE_WIDTH;
-  return firstBookCenter + index * offsetPerBook + firstBookCenter/2;
-};
-
-const getCenterTranslationX = (index: number): number => {
-  const bookCenter = getBookShelfPosition(index);
-  return MODAL_SIZE/2 - bookCenter;
-};
-
-
-const getPreviewStartIndex = (keyCode: string, lastFocusedIndex: number): number => {
-  if (lastFocusedIndex === -1) {
-    return (keyCode === 'ArrowRight') ? 0 : books.length - 1;
-  }
-  
-  if (keyCode === 'ArrowLeft') {
-    return (lastFocusedIndex > 0) ? lastFocusedIndex - 1 : 0;
-  }
-  
-  return (lastFocusedIndex < books.length - 1) ? lastFocusedIndex + 1 : books.length - 1;
-};
-
-const getNextNavigationIndex = (keyCode: string, currentFocusedIndex: number): number | 'unfocus' => {
-  if (currentFocusedIndex === -1) {
-    return (keyCode === 'ArrowRight') ? 0 : books.length - 1;
-  }
-  
-  if (keyCode === 'ArrowLeft') {
-    if (currentFocusedIndex > 0) {
-      return currentFocusedIndex - 1;
-    }
-    return 'unfocus';
-  }
-  
-  if (keyCode === 'ArrowRight') {
-    if (currentFocusedIndex < books.length - 1) {
-      return currentFocusedIndex + 1;
-    }
-    return 'unfocus';
-  }
-  
-  return -1;
-};
-
-
-const books: {
+const videogames: {
   title: string;
   coverUrl: string;
 }[] = [
@@ -167,6 +119,54 @@ const books: {
   },
 ];
 
+
+const getBookShelfPosition = (index: number): number => {
+  const firstBookCenter = (SPINE_WIDTH / 3*2 + COVER_WIDTH) / 2;
+  const offsetPerBook = SPINE_WIDTH;
+  return firstBookCenter + index * offsetPerBook + firstBookCenter/2;
+};
+
+const getCenterTranslationX = (index: number): number => {
+  const bookCenter = getBookShelfPosition(index);
+  return MODAL_SIZE/2 - bookCenter;
+};
+
+
+const getPreviewStartIndex = (keyCode: string, lastFocusedIndex: number): number => {
+  if (lastFocusedIndex === -1) {
+    return (keyCode === 'ArrowRight') ? 0 : videogames.length - 1;
+  }
+  
+  if (keyCode === 'ArrowLeft') {
+    return (lastFocusedIndex > 0) ? lastFocusedIndex - 1 : 0;
+  }
+  
+  return (lastFocusedIndex < videogames.length - 1) ? lastFocusedIndex + 1 : videogames.length - 1;
+};
+
+const getNextNavigationIndex = (keyCode: string, currentFocusedIndex: number): number | 'unfocus' => {
+  if (currentFocusedIndex === -1) {
+    return (keyCode === 'ArrowRight') ? 0 : videogames.length - 1;
+  }
+  
+  if (keyCode === 'ArrowLeft') {
+    if (currentFocusedIndex > 0) {
+      return currentFocusedIndex - 1;
+    }
+    return 'unfocus';
+  }
+  
+  if (keyCode === 'ArrowRight') {
+    if (currentFocusedIndex < videogames.length - 1) {
+      return currentFocusedIndex + 1;
+    }
+    return 'unfocus';
+  }
+  
+  return -1;
+};
+
+
 type AnimationPhase = 'idle' | 'taking-out' | 'rotating-while-taking-out' | 'centering' | 'unfocusing-rotate-and-translate' | 'translate-back-to-shelf';
 
 const BookshelfContent = () => {
@@ -199,7 +199,7 @@ const BookshelfContent = () => {
     };
   }, []);
 
-  const handleBookClick = (index: number) => {
+  const handleBookClick = useCallback((index: number) => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
     if (focusedIndexRef.current === index) {
@@ -240,7 +240,7 @@ const BookshelfContent = () => {
         }, FOCUS_ROTATION_DELAY);
       }, 0);
     }
-  };
+  }, []);
 
   const pressedKeysRef = useRef<Set<string>>(new Set());
   const hoverIndexRef = useRef(-1);
@@ -299,7 +299,7 @@ const BookshelfContent = () => {
               return;
             }
 
-            currentPreviewIndex = (currentPreviewIndex + direction + books.length) % books.length;
+            currentPreviewIndex = (currentPreviewIndex + direction + videogames.length) % videogames.length;
             setHoveredIndex(currentPreviewIndex);
             hoverIndexRef.current = currentPreviewIndex;
           }, 300);
@@ -377,18 +377,18 @@ const BookshelfContent = () => {
       if (navigationTimeoutRef.current) clearTimeout(navigationTimeoutRef.current);
       if (repeatIntervalRef.current) clearInterval(repeatIntervalRef.current);
     };
-  }, []);
+  }, [handleBookClick]);
 
   return (
     <>
     <div className="absolute inset-0 w-full h-full">
             <Image 
               src={shelfImg.src} 
-            alt="Shelf" 
-            fill
-            className="object-cover"
-            priority
-            unoptimized
+              alt="Shelf" 
+              fill
+              className="object-cover"
+              priority
+              unoptimized={true}
           />
     </div>
       <svg className="invisible absolute inset-0 pointer-events-none">
@@ -407,8 +407,8 @@ const BookshelfContent = () => {
         gridAutoColumns: "auto", 
         justifyContent: "start", 
         alignItems: "start",
-        top: `${BOOKS_TOP_POSITION}px`,
-        left: `${BOOKS_LEFT_POSITION}px`,
+        top: `${VIDEOGAMES_TOP_POSITION}px`,
+        left: `${VIDEOGAMES_LEFT_POSITION}px`,
         transform: "rotate(-1deg)",
         transformOrigin: "top left",
       }} 
@@ -417,10 +417,10 @@ const BookshelfContent = () => {
             handleBookClick(focusedIndex);
           }
         }}>
-        {books.map((book, index) => (
+        {videogames.map((videogame, index) => (
     <button
             role="listitem"
-            key={book.title}
+            key={videogame.title}
             onClick={(e) => {
               e.stopPropagation();
               handleBookClick(index);
@@ -520,7 +520,7 @@ const BookshelfContent = () => {
                   background: `radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 30%, transparent 70%)`,
                 }}
               /> 
-              <Image src={book.coverUrl} alt={book.title} className={`h-full bg-cover`} width={COVER_WIDTH} height={COVER_HEIGHT} style={{ padding: "12px 8px", paddingTop: "14px", filter: focusedIndex === index ? "brightness(100%)" : hoveredIndex === index ? "brightness(70%)" : "brightness(40%)", transition: "filter 0.3s ease-in-out"}} />
+              <Image src={videogame.coverUrl} alt={videogame.title} className={`h-full bg-cover`} width={COVER_WIDTH} height={COVER_HEIGHT} style={{ padding: "12px 8px", paddingTop: "14px", filter: focusedIndex === index ? "brightness(100%)" : hoveredIndex === index ? "brightness(70%)" : "brightness(40%)", transition: "filter 0.3s ease-in-out"}} />
               <div className="absolute top-0 left-0 w-full h-full" style={{ backgroundImage: `url(${CoverOverlay.src})`, backgroundSize: "100% 100%", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}></div>
             
       </div>
