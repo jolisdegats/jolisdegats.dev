@@ -316,10 +316,10 @@ const BookshelfContent = () => {
         clearTimeout(navigationTimeoutRef.current);
         navigationTimeoutRef.current = null;
 
-        const nextIndexOrUnfocus = getNextNavigationIndex(keyCode, focusedIndexRef.current);
+        const nextIndexOrUnfocus = getNextNavigationIndex(keyCode, lastFocusedIndexRef.current);
         
         if (nextIndexOrUnfocus === 'unfocus') {
-          handleBookClick(focusedIndexRef.current);
+          handleBookClick(lastFocusedIndexRef.current);
         } else if (nextIndexOrUnfocus !== -1) {
           handleBookClick(nextIndexOrUnfocus);
         }
