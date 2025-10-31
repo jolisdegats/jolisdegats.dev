@@ -338,10 +338,10 @@ const BookshelfContent = () => {
         
         if (Math.abs(diff) > threshold) {
           const keyCode = diff > 0 ? 'ArrowRight' : 'ArrowLeft';
-          const nextIndexOrUnfocus = getNextNavigationIndex(keyCode, focusedIndexRef.current);
+          const nextIndexOrUnfocus = getNextNavigationIndex(keyCode, lastFocusedIndexRef.current);
           
           if (nextIndexOrUnfocus === 'unfocus') {
-            handleBookClick(focusedIndexRef.current);
+            handleBookClick(lastFocusedIndexRef.current);
           } else if (nextIndexOrUnfocus !== -1) {
             handleBookClick(nextIndexOrUnfocus);
           }
