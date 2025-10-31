@@ -233,6 +233,8 @@ const BookshelfContent = () => {
   const navigationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isInPreviewModeRef = useRef(false);
   const lastFocusedIndexRef = useRef(-1);
+  const touchStartXRef = useRef<number | null>(null);
+  const touchEndXRef = useRef<number | null>(null);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -324,9 +326,39 @@ const BookshelfContent = () => {
     window.addEventListener('keydown', handleKeyDown);
     window.addEventListener('keyup', handleKeyUp);
     
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartXRef.current = e.changedTouches[0].screenX;
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      touchEndXRef.current = e.changedTouches[0].screenX;
+      if (touchStartXRef.current !== null && touchEndXRef.current !== null) {
+        const diff = touchStartXRef.current - touchEndXRef.current;
+        const threshold = 50; // minimum swipe distance
+        
+        if (Math.abs(diff) > threshold) {
+          const keyCode = diff > 0 ? 'ArrowRight' : 'ArrowLeft';
+          const nextIndexOrUnfocus = getNextNavigationIndex(keyCode, focusedIndexRef.current);
+          
+          if (nextIndexOrUnfocus === 'unfocus') {
+            handleBookClick(focusedIndexRef.current);
+          } else if (nextIndexOrUnfocus !== -1) {
+            handleBookClick(nextIndexOrUnfocus);
+          }
+        }
+      }
+      touchStartXRef.current = null;
+      touchEndXRef.current = null;
+    };
+
+    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchend', handleTouchEnd);
+    
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchend', handleTouchEnd);
       if (navigationTimeoutRef.current) clearTimeout(navigationTimeoutRef.current);
       if (repeatIntervalRef.current) clearInterval(repeatIntervalRef.current);
     };
@@ -486,10 +518,10 @@ const BookshelfContent = () => {
 
 export const MarkerBookshelf = () => {
   const { dispatch } = useAppContext();
-  const [modalPosition, setModalPosition] = useState<{ x: number, y: number } | null>(null);
+  const modalPositionRef = useRef<{ x: number, y: number } | null>(null);
 
   const onClickBookshelf = (e: React.MouseEvent<HTMLElement>) => {
-    setModalPosition({ x: e.clientX, y: e.clientY });
+    modalPositionRef.current = { x: e.clientX, y: e.clientY };
     dispatch(changeModal({ name: "bookshelf" }));
   };
 
@@ -506,8 +538,7 @@ export const MarkerBookshelf = () => {
       name="bookshelf"
       width={`${MODAL_SIZE}px`}
       height={`${MODAL_SIZE}px`}
-      x={`calc(${(modalPosition?.x || 0)}px )`} 
-      y={`calc(${(modalPosition?.y || 0)}px - ${MODAL_SIZE}px - 30px)`}
+      modalPositionRef={modalPositionRef}
     >
       <BookshelfContent />
     </BubbleModal>
