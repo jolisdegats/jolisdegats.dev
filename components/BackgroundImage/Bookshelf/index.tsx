@@ -26,6 +26,9 @@ import HeavyRain from '@/assets/games/heavyrain.webp';
 import Expedition33 from '@/assets/games/clairobscurexpedition33.webp';
 import Spine from '@/assets/games/spine.webp';
 import CoverOverlay from '@/assets/games/coveroverlay.webp';
+import { PiHandSwipeLeft, PiHandSwipeRight } from "react-icons/pi";
+import { RiSpace } from "react-icons/ri";
+import { FaLongArrowAltLeft, FaLongArrowAltRight } from "react-icons/fa";
 
 const MODAL_SIZE = 400;
 const BOOKS_LEFT_POSITION = 38;
@@ -170,13 +173,25 @@ const BookshelfContent = () => {
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const [hoveredIndex, setHoveredIndex] = useState(-1);
   const [animationPhase, setAnimationPhase] = useState<AnimationPhase>('idle');
+  const [showHint, setShowHint] = useState(true);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pendingClickRef = useRef<number | null>(null);
   const focusedIndexRef = useRef(-1);
+  const hintTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     focusedIndexRef.current = focusedIndex;
   }, [focusedIndex]);
+
+  useEffect(() => {
+    hintTimeoutRef.current = setTimeout(() => {
+      setShowHint(false);
+    }, 3000);
+    
+    return () => {
+      if (hintTimeoutRef.current) clearTimeout(hintTimeoutRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -512,6 +527,25 @@ const BookshelfContent = () => {
     </button>
         ))}
       </div>
+      {
+        <div 
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white text-opacity-30 hover:text-opacity-100 text-sm transition-all duration-500"
+          style={{ opacity: showHint ? 1 : 0, bottom: showHint ? "40px" : "30px" }}
+        >
+          <div className="text-center">
+          <div className="items-center justify-center gap-2 hidden md:flex text-2xl bg-white bg-opacity-0 text-white text-opacity-30">
+            <FaLongArrowAltLeft className="border-2 border-white border-opacity-30 rounded-md p-1"/>
+            /
+            <RiSpace className="border-2 border-white border-opacity-30 rounded-md p-1" />
+            /
+            <FaLongArrowAltRight className="border-2 border-white border-opacity-30 rounded-md p-1" />
+            </div>
+            <div className="flex items-center justify-center gap-2 md:hidden text-2xl bg-white bg-opacity-0 text-white text-opacity-30">
+               <PiHandSwipeLeft /> / <PiHandSwipeRight />
+            </div>
+          </div>
+        </div>
+      }
     </>
   );
 };

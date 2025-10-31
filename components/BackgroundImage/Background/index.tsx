@@ -1,4 +1,4 @@
-import Image, { StaticImageData } from 'next/image';
+import Image from 'next/image';
 import { Suspense, useMemo, useState, useCallback, useEffect } from 'react';
 
 import imageUrl from '@/assets/main-background.webp';
@@ -13,13 +13,6 @@ import sea from '@/assets/sea.webp';
 import seaclouds from '@/assets/seaclouds.webp';
 import sky from '@/assets/sky.webp';
 
-interface LazyImageProps {
-  src: string | StaticImageData;
-  alt: string;
-  unoptimized?: boolean;
-  [key: string]: string | StaticImageData | boolean | undefined;
-}
-
 const getRandomDuration = () => {
   return Math.random() * 240 + 60;
 }
@@ -27,16 +20,6 @@ const getRandomDuration = () => {
 const getRandomAnimationDelay = () => {
   return -Math.random() * (240 + 60);
 }
-
-const LazyImage = ({ src, alt, unoptimized, ...props }: LazyImageProps) => (
-  <Image
-    loading="lazy"
-    src={src}
-    alt={alt}
-    unoptimized={unoptimized}
-    {...props}
-  />
-);
 
 const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
   const [imagesLoaded, setImagesLoaded] = useState({
