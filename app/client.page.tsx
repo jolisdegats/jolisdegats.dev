@@ -57,11 +57,28 @@ const ClientPage = () => {
             if (mouseTimeoutRef.current) clearTimeout(mouseTimeoutRef.current);
         };
     }, []);
-    
+
+    const { state: { modalOpen } } = useAppContext();
+
+
+
+
+    useEffect(() => {
+        console.log(modalOpen.name);
+        const scrollContainer = document.getElementById('scroll-container');
+        if (!scrollContainer) return;
+        if ( modalOpen.name !== "" && modalOpen.name !== null) {
+            scrollContainer.style.overflow = 'hidden';
+        } else {
+            scrollContainer.style.overflow = 'auto';
+        }
+    }, [modalOpen.name]);
+
     return (
         <div 
             ref={scrollContainerRef}
-            className="relative w-svw h-svh overflow-x-auto lg:overflow-x-hidden overflow-y-hidden"
+            id="scroll-container"
+            className="relative w-svw h-svh lg:overflow-x-hidden overflow-y-hidden"
             style={{ scrollBehavior: 'smooth' }}
         >
             <div 

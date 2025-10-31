@@ -1,25 +1,25 @@
 import { changeModal } from "@/lib/context";
-import { useAppContext } from "@/lib/hooks";
+import { useAppContext, useIsDesktop } from "@/lib/hooks";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
-import Portal from "../../Portal";
+import Portal from "@/components/UI/Portal";
 
 type BubbleModalProps = {
   children: ReactNode;
   height: string;
   width: string;
-  x: string;
-  y: string;
+  modalPositionRef: React.RefObject<{ x: number, y: number } | null>;
   name: string;
 };
 
 const BubbleModal = ({
-  name, children, height, width, x, y
+  name, children, height, width, modalPositionRef
 }: BubbleModalProps) => {
   const { state: { modalOpen }, dispatch } = useAppContext();
   const modalRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-      
+  const isDesktop = useIsDesktop();
+
   const onCloseModal = useCallback(() => {
     setIsAnimating(true);
     // Wait for animation to complete
@@ -60,11 +60,13 @@ const BubbleModal = ({
     <div
       ref={modalRef}
       style={{
-        position: "absolute",
+        position: "fixed",
         height,
         width,
-        top: y,
-        left: x,
+        top: isDesktop ? `${(modalPositionRef.current?.y || 0)}px`: "50%",
+        left: isDesktop ? `${(modalPositionRef.current?.x || 0)}px`: "50%",
+        marginTop: isDesktop ? -parseInt(height) + 30 : -(parseInt(height) / 2),
+        marginLeft: isDesktop ? -30 :  -(parseInt(width) / 2),
         clipPath: "circle(50% at 50% 50%)",
         WebkitClipPath: "circle(50% at 50% 50%)",
         zIndex: 999,
@@ -73,7 +75,7 @@ const BubbleModal = ({
         isAnimating ? "modal-content-exit" : "modal-content-enter"
       }`}
     >
-      <div className="w-full px-5 lg:px-10 pb-10 pt-0 overflow-hidden flex flex-col grow">
+      <div className="w-full h-full px-5 lg:px-10 pb-10 pt-0 overflow-hidden">
         {children}
       </div>
     </div>
