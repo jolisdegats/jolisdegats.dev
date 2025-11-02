@@ -93,6 +93,8 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
           position: 'absolute', 
           top: 0, 
           left: 0,
+          opacity: imagesLoaded.gifCode && imagesLoaded.gifTyping ? 1 : 0,
+          transition: 'opacity 0.5s ease-in-out'
         }}
       >
         <Suspense fallback={null}>
