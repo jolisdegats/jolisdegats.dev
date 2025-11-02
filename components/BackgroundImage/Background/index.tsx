@@ -61,8 +61,7 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
   }, [imagesLoaded.mainBg, imagesLoaded.gifCode, imagesLoaded.gifTyping, hasNotified, onLoad]);
 
   return (
-    <div className='z-[-10] absolute top-0 left-0 w-full h-full transition-opacity duration-500' 
-         style={{ opacity: imagesLoaded.mainBg && imagesLoaded.gifCode && imagesLoaded.gifTyping ? 1 : 0 }}>
+    <div className='z-[-10] absolute top-0 left-0 w-full h-full'>
       <Image 
         priority 
         src={sky} 
@@ -84,8 +83,6 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
         fill 
         className='object-cover'
       />
-
-
       <svg 
         width="100%" 
         height="100%" 
@@ -143,6 +140,14 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
         onLoad={handleGifTypingLoad}
       />
      
+         {/* Loading overlay - fades out when images load */}
+         <div 
+        className='z-[100] absolute inset-0 bg-bg-dark transition-opacity duration-500 pointer-events-none'
+        style={{
+          opacity: (imagesLoaded.mainBg && imagesLoaded.gifCode && imagesLoaded.gifTyping) ? 0 : 1,
+          pointerEvents: (imagesLoaded.mainBg && imagesLoaded.gifCode && imagesLoaded.gifTyping) ? 'none' : 'auto'
+        }}
+      />
     </div>
   );
 }
