@@ -23,7 +23,7 @@ const MarkerComponents = {
   Me: dynamic(() => import('@/components/BackgroundImage/Me').then(mod => ({ default: mod.MarkerMe })), { ssr: false }),
   Cat: dynamic(() => import('@/components/BackgroundImage/Cat').then(mod => ({ default: mod.MarkerCat })), { ssr: false }),
   Computer: dynamic(() => import('@/components/BackgroundImage/Computer'),{ ssr: false }),
-  Bookshelf: dynamic(() => import('@/components/BackgroundImage/Bookshelf').then(mod => ({ default: mod.MarkerBookshelf })), { ssr: false }),
+  VideoGamesShelf: dynamic(() => import('@/components/BackgroundImage/VideoGamesShelf').then(mod => ({ default: mod.MarkerVideoGamesShelf })), { ssr: false }),
 };
 
 const BackgroundImage = () => {
