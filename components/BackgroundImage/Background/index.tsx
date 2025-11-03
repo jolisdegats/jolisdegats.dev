@@ -88,6 +88,7 @@ const Background = ({ onImageLoad }: { onImageLoad: (imageId: 'mainBg' | 'gifCod
           alt={id}
           fill
           className="object-contain"
+          sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 100vw"
         />
       </div>
     )}
@@ -101,7 +102,7 @@ const Background = ({ onImageLoad }: { onImageLoad: (imageId: 'mainBg' | 'gifCod
         alt="main background" 
         fill 
         className='object-cover' 
-        onLoadingComplete={() => onImageLoad('mainBg')}
+        onLoad={() => onImageLoad('mainBg')}
         sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 100vw"
       />
 
@@ -112,7 +113,7 @@ const Background = ({ onImageLoad }: { onImageLoad: (imageId: 'mainBg' | 'gifCod
         alt="code animation" 
         fill 
         className='object-cover'
-        onLoadingComplete={() => onImageLoad('gifCode')}
+        onLoad={() => onImageLoad('gifCode')}
         sizes="100vw"
       />
       <Image 
@@ -122,7 +123,7 @@ const Background = ({ onImageLoad }: { onImageLoad: (imageId: 'mainBg' | 'gifCod
         alt="typing animation" 
         fill 
         className='object-cover'
-        onLoadingComplete={() => onImageLoad('gifTyping')}
+        onLoad={() => onImageLoad('gifTyping')}
         sizes="100vw"
       />
     </div>

@@ -53,7 +53,7 @@ export const MarkerCat = () => {
 
 
 export const ImageCat = () => {
-    return <div style={{ width: '100%', height: '100%' }}>
+    return <div style={{ position: 'absolute', width: '100%', height: '100%' }}>
         <Image 
         alt="cat"
         priority
