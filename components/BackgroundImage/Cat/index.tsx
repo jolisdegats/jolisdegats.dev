@@ -56,6 +56,8 @@ export const ImageCat = () => {
     return <div style={{ width: '100%', height: '100%' }}>
         <Image 
         alt="cat"
+        priority
+        fetchPriority="high"
         src={gifCat} 
         fill 
         className="object-cover" 
