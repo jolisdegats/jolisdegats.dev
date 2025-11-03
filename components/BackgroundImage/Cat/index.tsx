@@ -5,7 +5,7 @@ import { useState, useCallback } from 'react';
 import { useSoundEffect } from '@/lib/hooks/useSoundEffect';
 import Image from 'next/image';
 
-const VOLUME = 0.2;
+const VOLUME = 0.5;
 
 export const MarkerCat = () => {
     const {play, fade, stop} = useSoundEffect(catPurring, { volume: 0});
