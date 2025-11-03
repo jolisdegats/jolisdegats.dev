@@ -96,7 +96,7 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
         }}
       >
         <Suspense fallback={null}>
-          {cloudAnimations.map(({ key, href, id, duration, animationDelay }) => (
+          {imagesLoaded.mainBg && cloudAnimations.map(({ key, href, id, duration, animationDelay }) => (
             <image
               key={key}
               href={href}
