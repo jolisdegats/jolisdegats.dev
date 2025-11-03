@@ -388,8 +388,8 @@ const BookshelfContent = () => {
               fill
               className="object-cover"
               priority
-              unoptimized={true}
-          />
+              sizes={`(max-width: ${MODAL_SIZE}px) ${MODAL_SIZE}px, 100%`}
+            />
     </div>
       <svg className="invisible absolute inset-0 pointer-events-none">
         <defs>

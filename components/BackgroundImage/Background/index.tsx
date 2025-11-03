@@ -68,6 +68,7 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
         alt="sky" 
         fill 
         className='object-cover'
+        sizes="100vw"
       />
       <Image 
         priority 
@@ -75,6 +76,7 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
         alt="sea" 
         fill 
         className='object-cover'
+        sizes="100vw"
       />
       <Image 
         priority 
@@ -82,6 +84,7 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
         alt="seaclouds" 
         fill 
         className='object-cover'
+        sizes="100vw"
       />
       <svg 
         width="100%" 
@@ -127,8 +130,8 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
         alt="code animation" 
         fill 
         className='object-cover'
-        unoptimized={true}
         onLoad={handleGifCodeLoad}
+        sizes="100vw"
       />
       <Image 
         priority
@@ -136,8 +139,8 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
         alt="typing animation" 
         fill 
         className='object-cover'
-        unoptimized={true}
         onLoad={handleGifTypingLoad}
+        sizes="100vw"
       />
      
          {/* Loading overlay - fades out when images load */}
