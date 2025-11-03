@@ -64,7 +64,6 @@ const ClientPage = () => {
 
 
     useEffect(() => {
-        console.log(modalOpen.name);
         const scrollContainer = document.getElementById('scroll-container');
         if (!scrollContainer) return;
         if ( modalOpen.name !== "" && modalOpen.name !== null) {

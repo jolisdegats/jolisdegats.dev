@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Suspense, useMemo, useState, useCallback, useEffect } from 'react';
+import { useMemo, useState, useCallback, useEffect } from 'react';
 
 import imageUrl from '@/assets/main-background.webp';
 import gifCode from '@/assets/gif-code.webp';
@@ -31,10 +31,12 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
 
   const cloudImages = useMemo(() => [cloud1, cloud2, cloud3, cloud4, cloud5], []);
 
-  const cloudAnimations = useMemo(() => 
+  const cloudAnimations = useMemo(() =>
     cloudImages.map((cloud, index) => ({
       key: cloud.src,
       href: cloud.src,
+      width: cloud.width,
+      height: cloud.height,
       id: `cloud${index + 1}`,
       duration: getRandomDuration(),
       animationDelay: getRandomAnimationDelay(),
@@ -63,56 +65,65 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
   return (
     <div className='z-[-10] absolute top-0 left-0 w-full h-full'>
       <Image 
-        priority 
+        priority
+        fetchPriority="high" 
         src={sky} 
         alt="sky" 
         fill 
         className='object-cover'
+        sizes="100vw"
       />
       <Image 
         priority 
+        fetchPriority="high" 
         src={sea} 
         alt="sea" 
         fill 
         className='object-cover'
+        sizes="100vw"
       />
       <Image 
         priority 
+        fetchPriority="high" 
         src={seaclouds} 
         alt="seaclouds" 
         fill 
         className='object-cover'
+        sizes="100vw"
       />
-      <svg 
-        width="100%" 
-        height="100%" 
-        style={{ 
-          position: 'absolute', 
-          top: 0, 
+
+      
+     <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', overflow: 'hidden' }}>
+      {cloudAnimations.map(({ key, href, id, duration, animationDelay, width, height }) =>
+      <div
+        key={key}
+        style={{
+          position: 'absolute',
+          top: 0,
           left: 0,
+          width: `${width * window.innerHeight/imageUrl.height}px`,
+          height: `${height * window.innerHeight/imageUrl.height}px`,
+          animationDuration: `${duration}s`,
+          animationDelay: `${animationDelay}s`,
         }}
+        className="cloud-animation"
       >
-        <Suspense fallback={null}>
-          {cloudAnimations.map(({ key, href, id, duration, animationDelay }) => (
-            <image
-              key={key}
-              href={href}
-              id={id}
-              height="100%"
-              preserveAspectRatio="xMidYMid slice"
-              className="cloud-animation"
-              style={{
-                animationDuration: `${duration}s`,
-                animationDelay: `${animationDelay}s`,
-              } as React.CSSProperties}
-            />
-          ))}
-        </Suspense>
-      </svg>
+        <Image
+          priority
+          fetchPriority="high" 
+          src={href}
+          alt={id}
+          fill
+          className="object-contain"
+        />
+      </div>
+    )}
+  </div>
 
       <Image 
         placeholder='blur' 
         priority 
+        fetchPriority="high" 
         src={imageUrl} 
         alt="main background" 
         fill 
@@ -123,21 +134,23 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
 
       <Image 
         priority
+        fetchPriority="high" 
         src={gifCode} 
         alt="code animation" 
         fill 
         className='object-cover'
-        unoptimized={true}
         onLoad={handleGifCodeLoad}
+        sizes="100vw"
       />
       <Image 
         priority
+        fetchPriority="high" 
         src={gifTyping} 
         alt="typing animation" 
         fill 
         className='object-cover'
-        unoptimized={true}
         onLoad={handleGifTypingLoad}
+        sizes="100vw"
       />
      
          {/* Loading overlay - fades out when images load */}
