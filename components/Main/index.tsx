@@ -13,7 +13,7 @@ import { MarkerFlowers } from '@/components/Main/Flowers';
 import { MarkerMe } from '@/components/Main/Me';
 import { MarkerCat } from '@/components/Main/Cat';
 import { MarkerComputer } from '@/components/Main/Computer';
-import { MarkerBookshelf } from '@/components/Main/Bookshelf';
+import { MarkerVideoGamesShelf } from '@/components/Main/VideoGamesShelf';
 
 const ImageComponents = {
   Radio: ImageRadio,
@@ -30,7 +30,7 @@ const MarkerComponents = {
   Me: MarkerMe,
   Cat: MarkerCat,
   Computer: MarkerComputer,
-  Bookshelf: MarkerBookshelf,
+  VideoGamesShelf: MarkerVideoGamesShelf,
 };
 
 const Main = () => {
