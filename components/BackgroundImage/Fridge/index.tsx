@@ -3,6 +3,7 @@ import Shape from "@/components/BackgroundImage/Shape";
 import type { ShapeType } from "@/components/BackgroundImage/Shape";
 import { toggleFridge } from "@/lib/context";
 import fridgeOpen from '@/assets/fridge2.png';
+import Image from "@/components/UI/Image";
 
 
 const MarkerFridge = () => {
@@ -17,7 +18,14 @@ const MarkerFridge = () => {
       }
       return (
         <>
-       {isFridgeOpen && <image  xlinkHref={fridgeOpen.src} className="h-full w-full absolute top-0 right-0"/>}
+        <div style={{ width: '100%', height: '100%' }}>  
+    <Image
+    alt="fridge"
+    src={fridgeOpen} 
+    fill 
+    className={`object-cover ${isFridgeOpen ? 'opacity-100' : 'opacity-0'}`} />
+    </div>
+
           <Shape shape={shape} index="fridge"/>
         </>
       )

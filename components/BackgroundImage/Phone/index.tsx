@@ -2,6 +2,7 @@ import Shape, { ShapeType } from "@/components/BackgroundImage/Shape";
 import phoneOn from '@/assets/phone.webp';
 import { togglePhone } from "@/lib/context";
 import { useAppContext } from "@/lib/hooks";
+import Image from "@/components/UI/Image";
 
 
 export const MarkerPhone = () => {
@@ -20,4 +21,11 @@ export const MarkerPhone = () => {
 
 export const ImagePhone = ()=>{
     const { state : {isPhoneOn} } = useAppContext(); 
-   return <image xlinkHref={phoneOn.src} className={isPhoneOn ? 'opacity-100' : 'opacity-0'} />}
+    return <div style={{ position: 'absolute', width: '100%', height: '100%' }}>  
+    <Image 
+    alt="phone"
+    src={phoneOn} 
+    fill 
+    className={`object-cover ${isPhoneOn ? 'opacity-100' : 'opacity-0'}`} />
+    </div>
+   }

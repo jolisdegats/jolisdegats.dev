@@ -10,6 +10,7 @@ import { toggleRadio } from "@/lib/context";
 import { useAppContext } from "@/lib/hooks";
 import { useSoundEffect } from "@/lib/hooks/useSoundEffect";
 import { useState } from "react";
+import Image from '@/components/UI/Image';
 
 const getNextIndex = (currentIndex: number, totalTracks: number) => {
     return (currentIndex + 1) >= totalTracks ? 0 : currentIndex + 1;
@@ -123,5 +124,11 @@ export const MarkerRadio = () => {
 
 export const ImageRadio = () => {
     const { state: { isRadioOn } } = useAppContext();
-    return <image xlinkHref={radioOn.src} className={isRadioOn ? 'opacity-100' : 'opacity-0'} />;
+    return <div style={{ position: 'absolute', width: '100%', height: '100%' }}>  
+    <Image 
+    alt="radio"
+    src={radioOn} 
+    fill 
+    className={`object-cover ${isRadioOn ? 'opacity-100' : 'opacity-0'}`} />
+    </div>
 };

@@ -1,5 +1,5 @@
-import Image from 'next/image';
-import { useMemo, useState, useCallback, useEffect } from 'react';
+import Image from '@/components/UI/Image';
+import { useMemo } from 'react';
 
 import imageUrl from '@/assets/main-background.webp';
 import gifCode from '@/assets/gif-code.webp';
@@ -21,14 +21,7 @@ const getRandomAnimationDelay = () => {
   return -Math.random() * (240 + 60);
 }
 
-const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
-  const [imagesLoaded, setImagesLoaded] = useState({
-    mainBg: false,
-    gifCode: false,
-    gifTyping: false,
-  });
-  const [hasNotified, setHasNotified] = useState(false);
-
+const Background = ({ onImageLoad }: { onImageLoad: (imageId: 'mainBg' | 'gifCode' | 'gifTyping') => void }) => {
   const cloudImages = useMemo(() => [cloud1, cloud2, cloud3, cloud4, cloud5], []);
 
   const cloudAnimations = useMemo(() =>
@@ -41,26 +34,6 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
       duration: getRandomDuration(),
       animationDelay: getRandomAnimationDelay(),
     })), [cloudImages]);
-
-  // Check if all critical images have loaded
-  const handleMainBgLoad = useCallback(() => {
-    setImagesLoaded(prev => ({ ...prev, mainBg: true }));
-  }, []);
-
-  const handleGifCodeLoad = useCallback(() => {
-    setImagesLoaded(prev => ({ ...prev, gifCode: true }));
-  }, []);
-
-  const handleGifTypingLoad = useCallback(() => {
-    setImagesLoaded(prev => ({ ...prev, gifTyping: true }));
-  }, []);
-
-  useEffect(() => {
-    if (imagesLoaded.mainBg && imagesLoaded.gifCode && imagesLoaded.gifTyping && !hasNotified) {
-      onLoad(false);
-      setHasNotified(true);
-    }
-  }, [imagesLoaded.mainBg, imagesLoaded.gifCode, imagesLoaded.gifTyping, hasNotified, onLoad]);
 
   return (
     <div className='z-[-10] absolute top-0 left-0 w-full h-full'>
@@ -115,6 +88,7 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
           alt={id}
           fill
           className="object-contain"
+          sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 100vw"
         />
       </div>
     )}
@@ -128,7 +102,7 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
         alt="main background" 
         fill 
         className='object-cover' 
-        onLoad={handleMainBgLoad}
+        onLoad={() => onImageLoad('mainBg')}
         sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 100vw"
       />
 
@@ -139,27 +113,18 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
         alt="code animation" 
         fill 
         className='object-cover'
-        onLoad={handleGifCodeLoad}
+        onLoad={() => onImageLoad('gifCode')}
         sizes="100vw"
       />
       <Image 
         priority
         fetchPriority="high" 
-        src={gifTyping} 
+        src={gifTyping}
         alt="typing animation" 
         fill 
         className='object-cover'
-        onLoad={handleGifTypingLoad}
+        onLoad={() => onImageLoad('gifTyping')}
         sizes="100vw"
-      />
-     
-         {/* Loading overlay - fades out when images load */}
-         <div 
-        className='z-[100] absolute inset-0 bg-bg-dark transition-opacity duration-500 pointer-events-none'
-        style={{
-          opacity: (imagesLoaded.mainBg && imagesLoaded.gifCode && imagesLoaded.gifTyping) ? 0 : 1,
-          pointerEvents: (imagesLoaded.mainBg && imagesLoaded.gifCode && imagesLoaded.gifTyping) ? 'none' : 'auto'
-        }}
       />
     </div>
   );
