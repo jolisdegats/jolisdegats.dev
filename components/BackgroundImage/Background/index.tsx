@@ -31,10 +31,12 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
 
   const cloudImages = useMemo(() => [cloud1, cloud2, cloud3, cloud4, cloud5], []);
 
-  const cloudAnimations = useMemo(() => 
+  const cloudAnimations = useMemo(() =>
     cloudImages.map((cloud, index) => ({
       key: cloud.src,
       href: cloud.src,
+      width: cloud.width,
+      height: cloud.height,
       id: `cloud${index + 1}`,
       duration: getRandomDuration(),
       animationDelay: getRandomAnimationDelay(),
@@ -89,15 +91,15 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
 
       
      <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', overflow: 'hidden' }}>
-      {cloudAnimations.map(({ key, href, id, duration, animationDelay }) => (
+      {cloudAnimations.map(({ key, href, id, duration, animationDelay, width, height }) =>
       <div
         key={key}
         style={{
           position: 'absolute',
           top: 0,
           left: 0,
-          width: '100%',
-          height: '100%',
+          width: `${width * window.innerHeight/imageUrl.height}px`,
+          height: `${height * window.innerHeight/imageUrl.height}px`,
           animationDuration: `${duration}s`,
           animationDelay: `${animationDelay}s`,
         }}
@@ -111,7 +113,7 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
           className="object-contain"
         />
       </div>
-    ))}
+    )}
   </div>
 
       <Image 
