@@ -152,15 +152,6 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
         onLoad={handleGifTypingLoad}
         sizes="100vw"
       />
-     
-         {/* Loading overlay - fades out when images load */}
-         <div 
-        className='z-[100] absolute inset-0 bg-bg-dark transition-opacity duration-500 pointer-events-none'
-        style={{
-          opacity: (imagesLoaded.mainBg && imagesLoaded.gifCode && imagesLoaded.gifTyping) ? 0 : 1,
-          pointerEvents: (imagesLoaded.mainBg && imagesLoaded.gifCode && imagesLoaded.gifTyping) ? 'none' : 'auto'
-        }}
-      />
     </div>
   );
 }

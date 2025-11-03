@@ -1,8 +1,9 @@
 import gifCat from '@/assets/gif-cat.webp';
 import catPurring from '@/assets/sounds/cat-purring.mp3';
-import Shape, { type ShapeType } from '../Shape';
-import { useState, useCallback } from 'react'; // Added useCallback
+import Shape, { type ShapeType } from '@/components/BackgroundImage/Shape';
+import { useState, useCallback } from 'react';
 import { useSoundEffect } from '@/lib/hooks/useSoundEffect';
+import Image from 'next/image';
 
 const VOLUME = 0.2;
 
@@ -52,5 +53,12 @@ export const MarkerCat = () => {
 
 
 export const ImageCat = () => {
-return <image xlinkHref={gifCat.src}  width="100%" height="100%" />
+    return <div style={{ width: '100%', height: '100%' }}>
+        <Image 
+        alt="cat"
+        src={gifCat} 
+        fill 
+        className="object-cover" 
+        />
+        </div>
 }

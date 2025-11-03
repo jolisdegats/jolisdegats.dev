@@ -4,6 +4,7 @@ import { toggleLight } from "@/lib/context";
 import { useAppContext } from "@/lib/hooks";
 import turnonlamp from "@/assets/sounds/turnonlamp.mp3";
 import { useSoundEffect } from "@/lib/hooks/useSoundEffect";
+import Image from "next/image";
 
 export const MarkerLight = () => {
   const { dispatch } = useAppContext(); 
@@ -26,4 +27,11 @@ const onClickLamp = () => {
 
 export const ImageLight = () => {
   const { state : {isLightOn} } = useAppContext(); 
-  return <image xlinkHref={lightOn.src} className={isLightOn ? 'opacity-100' : 'opacity-0'} />}
+  return <div style={{ width: '100%', height: '100%' }}>
+    <Image 
+    alt="light"
+    src={lightOn} 
+    fill 
+    className={`object-cover ${isLightOn ? 'opacity-100' : 'opacity-0'}`} />
+    </div>
+  }

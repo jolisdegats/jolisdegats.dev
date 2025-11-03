@@ -1,6 +1,6 @@
 'use client'
 import dynamic from 'next/dynamic';
-import { Suspense, useState } from 'react';
+import { useState } from 'react';
 
 // Dynamically import components
 const Background = dynamic(() => import('@/components/BackgroundImage/Background'), {
@@ -9,7 +9,7 @@ const Background = dynamic(() => import('@/components/BackgroundImage/Background
 });
 
 const ImageComponents = {
-  Cat: dynamic(() => import('@/components/BackgroundImage/Cat').then(mod => ({ default: mod.ImageCat }))),
+  Cat: dynamic(() => import('@/components/BackgroundImage/Cat').then(mod => ({ default: mod.ImageCat })), { ssr: false }),
   Radio: dynamic(() => import('@/components/BackgroundImage/Radio').then(mod => ({ default: mod.ImageRadio })), { ssr: false }),
   Phone: dynamic(() => import('@/components/BackgroundImage/Phone').then(mod => ({ default: mod.ImagePhone })), { ssr: false }),
   Light: dynamic(() => import('@/components/BackgroundImage/Light').then(mod => ({ default: mod.ImageLight })), { ssr: false }),
@@ -34,39 +34,36 @@ const BackgroundImage = () => {
     <>
       <Background onLoad={setIsBgLoading} />
       <div id="bubble-portal"/>
-      {!isBgLoading && (
-        <svg
-          className="absolute top-0 left-0 w-full h-full"
-          width="100%"
-          height="100%"
-          preserveAspectRatio="xMidYMid slice"
-          viewBox="0 0 2688 1792"
-          xmlns="http://www.w3.org/2000/svg"
-          xmlnsXlink="http://www.w3.org/1999/xlink"
-        >
-          <style>
-            {`
-              .image-mapper-shape {
-                fill: rgba(0, 0, 0, 0);
-              }
-            `}
-          </style>
-
-          {/* Images */}
-          <Suspense fallback={null}>
             {Object.entries(ImageComponents).map(([key, Component]) => (
               <Component key={key} />
             ))}
-          </Suspense>
+            <svg
+              className="absolute top-0 left-0 w-full h-full"
+              width="100%"
+              height="100%"
+              preserveAspectRatio="xMidYMid slice"
+              viewBox="0 0 2688 1792"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlnsXlink="http://www.w3.org/1999/xlink"
+            >
+              <style>
+                {`
+                  .image-mapper-shape {
+                    fill: rgba(0, 0, 0, 0);
+                  }
+                `}
+              </style>
+              {/* Markers */}
+              {Object.entries(MarkerComponents).map(([key, Component]) => (
+                <Component key={key} />
+              ))}
+            </svg>
 
-          {/* Markers */}
-          <Suspense fallback={null}>
-            {Object.entries(MarkerComponents).map(([key, Component]) => (
-              <Component key={key} />
-            ))}
-          </Suspense>
-        </svg>
-      )}
+            <div className='z-[100] absolute inset-0 bg-bg-dark transition-opacity duration-500 pointer-events-none' 
+            style={{ 
+              opacity: isBgLoading ? 1 : 0, 
+              pointerEvents: isBgLoading ? 'auto' : 'none' 
+              }} /> 
     </>
   );
 };
