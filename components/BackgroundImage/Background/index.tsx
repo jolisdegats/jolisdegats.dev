@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Suspense, useMemo, useState, useCallback, useEffect } from 'react';
+import { useMemo, useState, useCallback, useEffect } from 'react';
 
 import imageUrl from '@/assets/main-background.webp';
 import gifCode from '@/assets/gif-code.webp';
@@ -86,32 +86,33 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
         className='object-cover'
         sizes="100vw"
       />
-      <svg 
-        width="100%" 
-        height="100%" 
-        style={{ 
-          position: 'absolute', 
-          top: 0, 
+
+      
+     <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', overflow: 'hidden' }}>
+      {cloudAnimations.map(({ key, href, id, duration, animationDelay }) => (
+      <div
+        key={key}
+        style={{
+          position: 'absolute',
+          top: 0,
           left: 0,
+          width: '100%',
+          height: '100%',
+          animationDuration: `${duration}s`,
+          animationDelay: `${animationDelay}s`,
         }}
+        className="cloud-animation"
       >
-        <Suspense fallback={null}>
-          {imagesLoaded.mainBg && cloudAnimations.map(({ key, href, id, duration, animationDelay }) => (
-            <image
-              key={key}
-              href={href}
-              id={id}
-              height="100%"
-              preserveAspectRatio="xMidYMid slice"
-              className="cloud-animation"
-              style={{
-                animationDuration: `${duration}s`,
-                animationDelay: `${animationDelay}s`,
-              } as React.CSSProperties}
-            />
-          ))}
-        </Suspense>
-      </svg>
+        <Image
+          priority
+          src={href}
+          alt={id}
+          fill
+          className="object-contain"
+        />
+      </div>
+    ))}
+  </div>
 
       <Image 
         placeholder='blur' 
