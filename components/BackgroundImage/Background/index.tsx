@@ -65,7 +65,8 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
   return (
     <div className='z-[-10] absolute top-0 left-0 w-full h-full'>
       <Image 
-        priority 
+        priority
+        fetchPriority="high" 
         src={sky} 
         alt="sky" 
         fill 
@@ -74,6 +75,7 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
       />
       <Image 
         priority 
+        fetchPriority="high" 
         src={sea} 
         alt="sea" 
         fill 
@@ -82,6 +84,7 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
       />
       <Image 
         priority 
+        fetchPriority="high" 
         src={seaclouds} 
         alt="seaclouds" 
         fill 
@@ -107,6 +110,7 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
       >
         <Image
           priority
+          fetchPriority="high" 
           src={href}
           alt={id}
           fill
@@ -119,6 +123,7 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
       <Image 
         placeholder='blur' 
         priority 
+        fetchPriority="high" 
         src={imageUrl} 
         alt="main background" 
         fill 
@@ -129,6 +134,7 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
 
       <Image 
         priority
+        fetchPriority="high" 
         src={gifCode} 
         alt="code animation" 
         fill 
@@ -138,6 +144,7 @@ const Background = ({onLoad}: {onLoad: (isLoading: boolean) => void}) => {
       />
       <Image 
         priority
+        fetchPriority="high" 
         src={gifTyping} 
         alt="typing animation" 
         fill 
