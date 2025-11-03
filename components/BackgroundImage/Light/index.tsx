@@ -4,7 +4,7 @@ import { toggleLight } from "@/lib/context";
 import { useAppContext } from "@/lib/hooks";
 import turnonlamp from "@/assets/sounds/turnonlamp.mp3";
 import { useSoundEffect } from "@/lib/hooks/useSoundEffect";
-import Image from "next/image";
+import Image from "@/components/UI/Image";
 
 export const MarkerLight = () => {
   const { dispatch } = useAppContext(); 

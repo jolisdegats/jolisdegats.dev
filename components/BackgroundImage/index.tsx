@@ -2,7 +2,6 @@
 import dynamic from 'next/dynamic';
 import { useState, useRef, useEffect, useCallback } from 'react';
 
-// Dynamically import components
 const Background = dynamic(() => import('@/components/BackgroundImage/Background'), {
   loading: () => <div className="w-full h-screen bg-bg-dark" />,
   ssr: false

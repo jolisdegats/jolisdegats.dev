@@ -3,7 +3,7 @@ import catPurring from '@/assets/sounds/cat-purring.mp3';
 import Shape, { type ShapeType } from '@/components/BackgroundImage/Shape';
 import { useState, useCallback } from 'react';
 import { useSoundEffect } from '@/lib/hooks/useSoundEffect';
-import Image from 'next/image';
+import Image from '@/components/UI/Image';
 
 const VOLUME = 0.5;
 

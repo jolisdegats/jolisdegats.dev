@@ -2,7 +2,7 @@ import Shape, { ShapeType } from "@/components/BackgroundImage/Shape";
 import phoneOn from '@/assets/phone.webp';
 import { togglePhone } from "@/lib/context";
 import { useAppContext } from "@/lib/hooks";
-import Image from "next/image";
+import Image from "@/components/UI/Image";
 
 
 export const MarkerPhone = () => {

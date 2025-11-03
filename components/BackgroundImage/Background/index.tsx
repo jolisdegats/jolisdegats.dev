@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from '@/components/UI/Image';
 import { useMemo } from 'react';
 
 import imageUrl from '@/assets/main-background.webp';

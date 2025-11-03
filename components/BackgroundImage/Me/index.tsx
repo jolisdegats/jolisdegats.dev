@@ -1,7 +1,7 @@
 import Shape, { ShapeType } from "@/components/BackgroundImage/Shape";
 import { useAppContext } from "@/lib/hooks";
 import { changeModal } from "@/lib/context";
-import Image from "next/image";
+import Image from "@/components/UI/Image";
 import avatar from "@/assets/avatar.webp";
 import PopupModal from "@/components/UI/Modal/PopupModal";
 
@@ -36,7 +36,7 @@ export const MarkerMe = () => {
            </div>
            <div className="lg:h-full w-full lg:w-1/2 order-2 lg:order-2">
              <div className="relative h-[300px] lg:h-full w-full">
-               <Image src={avatar} alt="avatar" fill className="object-cover" sizes="400px" priority placeholder="blur" />
+               <Image placeholder="blur" src={avatar} alt="avatar" fill className="object-cover" sizes="400px" priority />
              </div>
            </div>
          </div>

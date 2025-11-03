@@ -10,7 +10,7 @@ import { toggleRadio } from "@/lib/context";
 import { useAppContext } from "@/lib/hooks";
 import { useSoundEffect } from "@/lib/hooks/useSoundEffect";
 import { useState } from "react";
-import Image from 'next/image';
+import Image from '@/components/UI/Image';
 
 const getNextIndex = (currentIndex: number, totalTracks: number) => {
     return (currentIndex + 1) >= totalTracks ? 0 : currentIndex + 1;

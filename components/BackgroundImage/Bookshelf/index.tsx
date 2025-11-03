@@ -6,7 +6,7 @@ import { changeModal } from "@/lib/context";
 import { useAppContext } from "@/lib/hooks";
 import BubbleModal from "@/components/UI/Modal/BubbleModal";
 import shelfImg from '@/assets/games/shelf.webp';
-import Image from "next/image";
+import Image from "@/components/UI/Image";
 import BrokenSword from '@/assets/games/brokensword.webp';
 import Pharaon from '@/assets/games/pharaon.webp';
 import ToTheMoon from '@/assets/games/tothemoon.webp';
@@ -383,6 +383,7 @@ const BookshelfContent = () => {
     <>
     <div className="absolute inset-0 w-full h-full">
             <Image 
+              placeholder='blur'
               src={shelfImg.src} 
               alt="Shelf" 
               fill
@@ -520,7 +521,7 @@ const BookshelfContent = () => {
                   background: `radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 30%, transparent 70%)`,
                 }}
               /> 
-              <Image src={videogame.coverUrl} alt={videogame.title} className={`h-full bg-cover`} width={COVER_WIDTH} height={COVER_HEIGHT} style={{ padding: "12px 8px", paddingTop: "14px", filter: focusedIndex === index ? "brightness(100%)" : hoveredIndex === index ? "brightness(70%)" : "brightness(40%)", transition: "filter 0.3s ease-in-out"}} />
+              <Image placeholder='blur' src={videogame.coverUrl} alt={videogame.title} className={`h-full bg-cover`} width={COVER_WIDTH} height={COVER_HEIGHT} style={{ padding: "12px 8px", paddingTop: "14px", filter: focusedIndex === index ? "brightness(100%)" : hoveredIndex === index ? "brightness(70%)" : "brightness(40%)", transition: "filter 0.3s ease-in-out"}} />
               <div className="absolute top-0 left-0 w-full h-full" style={{ backgroundImage: `url(${CoverOverlay.src})`, backgroundSize: "100% 100%", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}></div>
             
       </div>

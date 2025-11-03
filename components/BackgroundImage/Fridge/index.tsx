@@ -3,7 +3,7 @@ import Shape from "@/components/BackgroundImage/Shape";
 import type { ShapeType } from "@/components/BackgroundImage/Shape";
 import { toggleFridge } from "@/lib/context";
 import fridgeOpen from '@/assets/fridge2.png';
-import Image from "next/image";
+import Image from "@/components/UI/Image";
 
 
 const MarkerFridge = () => {
