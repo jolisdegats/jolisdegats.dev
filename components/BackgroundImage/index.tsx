@@ -1,6 +1,5 @@
 'use client'
 import dynamic from 'next/dynamic';
-import { useState, useRef, useEffect, useCallback } from 'react';
 
 const Background = dynamic(() => import('@/components/BackgroundImage/Background'), {
   loading: () => <div className="w-full h-screen bg-bg-dark" />,
@@ -27,33 +26,10 @@ const MarkerComponents = {
 };
 
 const BackgroundImage = () => {
-  const [isBgLoading, setIsBgLoading] = useState(true);
-  const loadedImagesRef = useRef({ mainBg: false, gifCode: false, gifTyping: false });
-  const notifiedRef = useRef(false);
-
-  const handleImageLoad = useCallback((imageId: 'mainBg' | 'gifCode' | 'gifTyping') => {
-    loadedImagesRef.current[imageId] = true;
-    const allLoaded = Object.values(loadedImagesRef.current).every(v => v);
-    if (allLoaded && !notifiedRef.current) {
-      setIsBgLoading(false);
-      notifiedRef.current = true;
-    }
-  }, []);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!notifiedRef.current) {
-        setIsBgLoading(false);
-        notifiedRef.current = true;
-      }
-    }, 4000);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   return (
     <>
-      <Background onImageLoad={handleImageLoad} />
+      <Background />
       <div id="bubble-portal"/>
             {Object.entries(ImageComponents).map(([key, Component]) => (
               <Component key={key} />
@@ -80,11 +56,11 @@ const BackgroundImage = () => {
               ))}
             </svg>
 
-            <div className='z-[100] absolute inset-0 bg-bg-dark transition-opacity duration-500 pointer-events-none' 
+            {/* <div className='z-[100] absolute inset-0 bg-bg-dark transition-opacity duration-500 pointer-events-none' 
             style={{ 
               opacity: isBgLoading ? 1 : 0, 
               pointerEvents: isBgLoading ? 'auto' : 'none' 
-              }} /> 
+              }} />  */}
     </>
   );
 };
