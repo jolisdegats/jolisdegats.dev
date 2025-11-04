@@ -1,3 +1,5 @@
+'use client';
+
 import Image from '@/components/UI/Image';
 import { useMemo } from 'react';
 
@@ -21,7 +23,7 @@ const getRandomAnimationDelay = () => {
   return -Math.random() * (240 + 60);
 }
 
-const Background = ({ onImageLoad }: { onImageLoad: (imageId: 'mainBg' | 'gifCode' | 'gifTyping') => void }) => {
+const Background = () => {
   const cloudImages = useMemo(() => [cloud1, cloud2, cloud3, cloud4, cloud5], []);
 
   const cloudAnimations = useMemo(() =>
@@ -35,6 +37,7 @@ const Background = ({ onImageLoad }: { onImageLoad: (imageId: 'mainBg' | 'gifCod
       animationDelay: getRandomAnimationDelay(),
     })), [cloudImages]);
 
+  const cloudContainerRatio = useMemo(() => window.innerHeight / imageUrl.height, []);
   return (
     <div className='z-[-10] absolute top-0 left-0 w-full h-full'>
       <Image 
@@ -46,6 +49,7 @@ const Background = ({ onImageLoad }: { onImageLoad: (imageId: 'mainBg' | 'gifCod
         className='object-cover'
         sizes="100vw"
       />
+      
       <Image 
         priority 
         fetchPriority="high" 
@@ -55,9 +59,10 @@ const Background = ({ onImageLoad }: { onImageLoad: (imageId: 'mainBg' | 'gifCod
         className='object-cover'
         sizes="100vw"
       />
+      
       <Image 
-        priority 
-        fetchPriority="high" 
+         priority 
+         fetchPriority="high" 
         src={seaclouds} 
         alt="seaclouds" 
         fill 
@@ -65,7 +70,6 @@ const Background = ({ onImageLoad }: { onImageLoad: (imageId: 'mainBg' | 'gifCod
         sizes="100vw"
       />
 
-      
      <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', overflow: 'hidden' }}>
       {cloudAnimations.map(({ key, href, id, duration, animationDelay, width, height }) =>
       <div
@@ -74,16 +78,16 @@ const Background = ({ onImageLoad }: { onImageLoad: (imageId: 'mainBg' | 'gifCod
           position: 'absolute',
           top: 0,
           left: 0,
-          width: `${width * window.innerHeight/imageUrl.height}px`,
-          height: `${height * window.innerHeight/imageUrl.height}px`,
+          width: `${width * cloudContainerRatio}px`,
+          height: `${height * cloudContainerRatio}px`,
           animationDuration: `${duration}s`,
           animationDelay: `${animationDelay}s`,
         }}
         className="cloud-animation"
       >
         <Image
-          priority
-          fetchPriority="high" 
+           priority 
+           fetchPriority="high" 
           src={href}
           alt={id}
           fill
@@ -101,29 +105,29 @@ const Background = ({ onImageLoad }: { onImageLoad: (imageId: 'mainBg' | 'gifCod
         src={imageUrl} 
         alt="main background" 
         fill 
-        className='object-cover' 
-        onLoad={() => onImageLoad('mainBg')}
+        className='object-cover'
         sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 100vw"
       />
 
       <Image 
-        priority
-        fetchPriority="high" 
+         priority 
+         fetchPriority="high" 
         src={gifCode} 
         alt="code animation" 
+        unoptimized
         fill 
         className='object-cover'
-        onLoad={() => onImageLoad('gifCode')}
         sizes="100vw"
       />
+      
       <Image 
-        priority
-        fetchPriority="high" 
+         priority 
+         fetchPriority="high" 
         src={gifTyping}
+        unoptimized
         alt="typing animation" 
         fill 
         className='object-cover'
-        onLoad={() => onImageLoad('gifTyping')}
         sizes="100vw"
       />
     </div>
