@@ -6,6 +6,7 @@ import { useMemo } from 'react';
 import imageUrl from '@/assets/main-background.webp';
 import gifCode from '@/assets/gif-code.webp';
 import gifTyping from '@/assets/gif-typing2.webp';
+import gifCat from '@/assets/gif-cat.webp';
 import cloud1 from '@/assets/cloud1.webp';
 import cloud2 from '@/assets/cloud2.webp';
 import cloud3 from '@/assets/cloud3.webp';
@@ -14,6 +15,7 @@ import cloud5 from '@/assets/cloud5.webp';
 import sea from '@/assets/sea.webp';
 import seaclouds from '@/assets/seaclouds.webp';
 import sky from '@/assets/sky.webp';
+
 
 const getRandomDuration = () => {
   return Math.random() * 240 + 60;
@@ -130,6 +132,21 @@ const Background = () => {
         className='object-cover'
         sizes="100vw"
       />
+      <Image 
+         priority 
+         fetchPriority="high" 
+        src={gifCat}
+        unoptimized
+        alt="cat animation" 
+        fill 
+        className='object-cover'
+        sizes="100vw"
+      />
+        {/* <div className='z-[100] absolute inset-0 bg-bg-dark transition-opacity duration-500 pointer-events-none' 
+            style={{ 
+              opacity: isBgLoading ? 1 : 0, 
+              pointerEvents: isBgLoading ? 'auto' : 'none' 
+              }} />  */}
     </div>
   );
 }

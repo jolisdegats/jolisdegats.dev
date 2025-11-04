@@ -1,9 +1,7 @@
-import gifCat from '@/assets/gif-cat.webp';
 import catPurring from '@/assets/sounds/cat-purring.mp3';
-import Shape, { type ShapeType } from '@/components/BackgroundImage/Shape';
+import Shape, { type ShapeType } from '@/components/Main/Shape';
 import { useState, useCallback } from 'react';
 import { useSoundEffect } from '@/lib/hooks/useSoundEffect';
-import Image from '@/components/UI/Image';
 
 const VOLUME = 0.5;
 
@@ -49,19 +47,4 @@ export const MarkerCat = () => {
     }
     return (<Shape shape={shape} index="cat"/>
     )
-}
-
-
-export const ImageCat = () => {
-    return <div style={{ position: 'absolute', width: '100%', height: '100%' }}>
-        <Image 
-         priority 
-         fetchPriority="high" 
-        alt="cat"
-        unoptimized
-        src={gifCat} 
-        fill 
-        className="object-cover" 
-        />
-        </div>
 }

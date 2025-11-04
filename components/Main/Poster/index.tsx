@@ -1,5 +1,5 @@
-import Shape from "@/components/BackgroundImage/Shape"
-import type { ShapeType } from "@/components/BackgroundImage/Shape"
+import Shape from "@/components/Main/Shape"
+import type { ShapeType } from "@/components/Main/Shape"
 
 const MarkerPoster = () => {
     const shape : ShapeType ={

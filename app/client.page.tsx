@@ -1,6 +1,6 @@
 'use client'
 
-import BackgroundImage from "@/components/BackgroundImage";
+import BackgroundImage from "@/components/Main";
 import { toggleHelpMarkers, changeModal } from "@/lib/context";
 import { useAppContext, useIsDesktop } from "@/lib/hooks";
 import { FaQuestionCircle, FaRegCopyright } from "react-icons/fa";

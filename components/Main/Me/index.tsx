@@ -1,4 +1,4 @@
-import Shape, { ShapeType } from "@/components/BackgroundImage/Shape";
+import Shape, { ShapeType } from "@/components/Main/Shape";
 import { useAppContext } from "@/lib/hooks";
 import { changeModal } from "@/lib/context";
 import Image from "@/components/UI/Image";

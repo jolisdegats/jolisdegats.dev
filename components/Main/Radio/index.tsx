@@ -2,7 +2,7 @@ import radioMusicHappyChildren from '@/assets/sounds/happy-children.mp3';
 import radioMusicShy from '@/assets/sounds/shy.mp3';
 import radioMusicSmoothOperator from '@/assets/sounds/smooth-operator.mp3';
 import radioMusicDreams from '@/assets/sounds/dreams.mp3';
-import Shape, { ShapeType } from "@/components/BackgroundImage/Shape";
+import Shape, { ShapeType } from "@/components/Main/Shape";
 import radioTuning from '@/assets/sounds/tuning-radio.mp3';
 import radioSwitch from '@/assets/sounds/radio-switch.mp3';
 import radioOn from '@/assets/radio-on.webp';
