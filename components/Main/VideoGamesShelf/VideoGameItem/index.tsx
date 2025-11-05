@@ -8,7 +8,7 @@ import {
   NEGATIVE_MARGIN,
   UNFOCUS_ROTATE_AND_TRANSLATE_DURATION,
   FOCUS_ROTATION_DURATION,
-} from '@/components/BackgroundImage/VideoGamesShelf/constants';
+} from '@/components/Main/VideoGamesShelf/constants';
 
 interface VideoGameItemProps {
   title: string;

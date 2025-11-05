@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { PREVIEW_SCROLL_INTERVAL, PREVIEW_START_DELAY, TOUCH_SWIPE_THRESHOLD } from '../constants';
+import { PREVIEW_SCROLL_INTERVAL, PREVIEW_START_DELAY, TOUCH_SWIPE_THRESHOLD } from '@/components/Main/VideoGamesShelf/constants';
 
 interface UseVideoGamesShelfInputProps {
   videogamesLength: number;

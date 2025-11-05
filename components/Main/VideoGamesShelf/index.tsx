@@ -1,12 +1,12 @@
 'use client';
 
 import { useState, useEffect, useRef } from "react";
-import { useVideoGamesShelfInput } from '@/components/BackgroundImage/VideoGamesShelf/hooks/useVideoGamesShelfInput';
-import { useVideoGamesAnimation } from '@/components/BackgroundImage/VideoGamesShelf/hooks/useVideoGamesAnimation';
-import { VideoGameItem } from '@/components/BackgroundImage/VideoGamesShelf/VideoGameItem';
-import { HintDisplay } from '@/components/BackgroundImage/VideoGamesShelf/HintDisplay';
-import { VIDEOGAMES_DATA } from '@/components/BackgroundImage/VideoGamesShelf/videogamesData';
-import Shape, { ShapeType } from "@/components/BackgroundImage/Shape";
+import { useVideoGamesShelfInput } from '@/components/Main/VideoGamesShelf/hooks/useVideoGamesShelfInput';
+import { useVideoGamesAnimation } from '@/components/Main/VideoGamesShelf/hooks/useVideoGamesAnimation';
+import { VideoGameItem } from '@/components/Main/VideoGamesShelf/VideoGameItem';
+import { HintDisplay } from '@/components/Main/VideoGamesShelf/HintDisplay';
+import { VIDEOGAMES_DATA } from '@/components/Main/VideoGamesShelf/videogamesData';
+import Shape, { ShapeType } from "@/components/Main/Shape";
 import { changeModal } from "@/lib/context";
 import { useAppContext } from "@/lib/hooks";
 import BubbleModal from "@/components/UI/Modal/BubbleModal";
@@ -20,7 +20,7 @@ import {
   VIDEOGAMES_LEFT_POSITION,
   type AnimationPhase,
   IDLE_ANIMATION_PHASE,
-} from "@/components/BackgroundImage/VideoGamesShelf/constants";
+} from "@/components/Main/VideoGamesShelf/constants";
 
 
 const getCenterTranslationX = (index: number): number => {
