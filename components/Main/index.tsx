@@ -1,35 +1,65 @@
 'use client'
 
-import dynamic from 'next/dynamic';
-
-const Background = dynamic(() => import('@/components/Main/Background'), {
-  loading: () => <div className="w-full h-screen bg-bg-dark" />,
-  ssr: false
-});
+import { useState, useEffect, useRef } from 'react';
+import Background from '@/components/Main/Background';
+import { ImageRadio } from '@/components/Main/Radio';
+import { ImagePhone } from '@/components/Main/Phone';
+import { ImageLight } from '@/components/Main/Light';
+import { MarkerRadio } from '@/components/Main/Radio';
+import { MarkerPhone } from '@/components/Main/Phone';
+import { MarkerLight } from '@/components/Main/Light';
+import { MarkerCoffee } from '@/components/Main/Coffee';
+import { MarkerFlowers } from '@/components/Main/Flowers';
+import { MarkerMe } from '@/components/Main/Me';
+import { MarkerCat } from '@/components/Main/Cat';
+import { MarkerComputer } from '@/components/Main/Computer';
+import { MarkerBookshelf } from '@/components/Main/Bookshelf';
 
 const ImageComponents = {
-  Radio: dynamic(() => import('@/components/Main/Radio').then(mod => ({ default: mod.ImageRadio })), { ssr: false }),
-  Phone: dynamic(() => import('@/components/Main/Phone').then(mod => ({ default: mod.ImagePhone })), { ssr: false }),
-  Light: dynamic(() => import('@/components/Main/Light').then(mod => ({ default: mod.ImageLight })), { ssr: false }),
+  Radio: ImageRadio,
+  Phone: ImagePhone,
+  Light: ImageLight,
 };
 
 const MarkerComponents = {
-  Radio: dynamic(() => import('@/components/Main/Radio').then(mod => ({ default: mod.MarkerRadio })), { ssr: false }),
-  Phone: dynamic(() => import('@/components/Main/Phone').then(mod => ({ default: mod.MarkerPhone })), { ssr: false }),
-  Light: dynamic(() => import('@/components/Main/Light').then(mod => ({ default: mod.MarkerLight })), { ssr: false }),
-  Coffee: dynamic(() => import('@/components/Main/Coffee').then(mod => ({ default: mod.MarkerCoffee })), { ssr: false }),
-  Flowers: dynamic(() => import('@/components/Main/Flowers'), { ssr: false }),
-  Me: dynamic(() => import('@/components/Main/Me').then(mod => ({ default: mod.MarkerMe })), { ssr: false }),
-  Cat: dynamic(() => import('@/components/Main/Cat').then(mod => ({ default: mod.MarkerCat })), { ssr: false }),
-  Computer: dynamic(() => import('@/components/Main/Computer'),{ ssr: false }),
-  Bookshelf: dynamic(() => import('@/components/Main/Bookshelf').then(mod => ({ default: mod.MarkerBookshelf })), { ssr: false }),
+  Radio: MarkerRadio,
+  Phone: MarkerPhone,
+  Light: MarkerLight,
+  Coffee: MarkerCoffee,
+  Flowers: MarkerFlowers,
+  Me: MarkerMe,
+  Cat: MarkerCat,
+  Computer: MarkerComputer,
+  Bookshelf: MarkerBookshelf,
 };
 
 const Main = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Fallback: hide overlay after 5 seconds
+  useEffect(() => {
+    timeoutRef.current = setTimeout(() => {
+      setIsLoading(false);
+    }, 5000);
+
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   return (
     <>
-      <Background />
+      {/* Loading overlay - appears immediately on top of everything */}
+      <div 
+        className='fixed inset-0 z-[200] bg-bg-dark transition-opacity duration-500 pointer-events-none' 
+        style={{ 
+          opacity: isLoading ? 1 : 0, 
+          pointerEvents: isLoading ? 'auto' : 'none' 
+        }} 
+      />
+      
+      <Background onLoadingComplete={() => setIsLoading(false)} />
       <div id="bubble-portal"/>
             {Object.entries(ImageComponents).map(([key, Component]) => (
               <Component key={key} />

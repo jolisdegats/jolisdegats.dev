@@ -1,9 +1,9 @@
-'use client';
+"use client"
 
 import Image from '@/components/UI/Image';
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
 
-import imageUrl from '@/assets/main-background.webp';
+import background from '@/assets/main-background.webp';
 import gifCode from '@/assets/gif-code.webp';
 import gifTyping from '@/assets/gif-typing2.webp';
 import gifCat from '@/assets/gif-cat.webp';
@@ -25,21 +25,79 @@ const getRandomAnimationDelay = () => {
   return -Math.random() * (240 + 60);
 }
 
-const Background = () => {
+interface BackgroundProps {
+  onLoadingComplete?: () => void;
+}
+
+const Background = ({ onLoadingComplete }: BackgroundProps) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [cloudContainerRatio, setCloudContainerRatio] = useState(1);
+  
+  // Critical images that need to load before hiding the overlay
+  const CRITICAL_IMAGES = ['background', 'gifCode', 'gifTyping', 'gifCat', 'seaclouds', 'cloud1', 'cloud2', 'cloud3', 'cloud4', 'cloud5', 'sea', 'sky'] as const;
+  
+  const loadedImagesRef = useRef<Record<(typeof CRITICAL_IMAGES)[number], boolean>>({
+    background: false,
+    gifCode: false,
+    gifTyping: false,
+    gifCat: false,
+    seaclouds: false,
+    cloud1: false,
+    cloud2: false,
+    cloud3: false,
+    cloud4: false,
+    cloud5: false,
+    sea: false,
+    sky: false,
+  });
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleImageLoad = (imageId: (typeof CRITICAL_IMAGES)[number]) => {
+    loadedImagesRef.current[imageId] = true;
+    
+    // Check if all critical images are loaded
+    const allLoaded = CRITICAL_IMAGES.every(id => loadedImagesRef.current[id] === true);
+    
+    if (allLoaded) {
+      setIsLoading(false);
+      onLoadingComplete?.();
+    }
+  };
+
+  // Calculate cloud container ratio on client side only
+  useEffect(() => {
+    const ratio = window.innerHeight / background.height;
+    setCloudContainerRatio(ratio);
+  }, []);
+
+  // Fallback: hide overlay after 5 seconds even if images haven't loaded
+  useEffect(() => {
+    timeoutRef.current = setTimeout(() => {
+      setIsLoading(false);
+      onLoadingComplete?.();
+    }, 5000);
+
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, [onLoadingComplete]);
+
   const cloudImages = useMemo(() => [cloud1, cloud2, cloud3, cloud4, cloud5], []);
 
   const cloudAnimations = useMemo(() =>
-    cloudImages.map((cloud, index) => ({
-      key: cloud.src,
-      href: cloud.src,
-      width: cloud.width,
-      height: cloud.height,
-      id: `cloud${index + 1}`,
-      duration: getRandomDuration(),
-      animationDelay: getRandomAnimationDelay(),
-    })), [cloudImages]);
-
-  const cloudContainerRatio = useMemo(() => window.innerHeight / imageUrl.height, []);
+    cloudImages.map((cloud, index) => {
+      const cloudId = `cloud${index + 1}` as const;
+      return {
+        key: cloud.src,
+        href: cloud.src,
+        width: cloud.width,
+        height: cloud.height,
+        id: cloudId,
+        duration: getRandomDuration(),
+        animationDelay: getRandomAnimationDelay(),
+      };
+    }), [cloudImages]);
+  
   return (
     <div className='z-[-10] absolute top-0 left-0 w-full h-full'>
       <Image 
@@ -50,6 +108,7 @@ const Background = () => {
         fill 
         className='object-cover'
         sizes="100vw"
+        onLoad={() => handleImageLoad('sky')}
       />
       
       <Image 
@@ -60,6 +119,7 @@ const Background = () => {
         fill 
         className='object-cover'
         sizes="100vw"
+        onLoad={() => handleImageLoad('sea')}
       />
       
       <Image 
@@ -70,6 +130,7 @@ const Background = () => {
         fill 
         className='object-cover'
         sizes="100vw"
+        onLoad={() => handleImageLoad('seaclouds')}
       />
 
      <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', overflow: 'hidden' }}>
@@ -95,6 +156,7 @@ const Background = () => {
           fill
           className="object-contain"
           sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 100vw"
+          onLoad={() => handleImageLoad(id as (typeof CRITICAL_IMAGES)[number])}
         />
       </div>
     )}
@@ -104,11 +166,12 @@ const Background = () => {
         placeholder='blur' 
         priority 
         fetchPriority="high" 
-        src={imageUrl} 
+        src={background} 
         alt="main background" 
         fill 
         className='object-cover'
         sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 100vw"
+        onLoad={() => handleImageLoad('background')}
       />
 
       <Image 
@@ -120,6 +183,7 @@ const Background = () => {
         fill 
         className='object-cover'
         sizes="100vw"
+        onLoad={() => handleImageLoad('gifCode')}
       />
       
       <Image 
@@ -131,6 +195,7 @@ const Background = () => {
         fill 
         className='object-cover'
         sizes="100vw"
+        onLoad={() => handleImageLoad('gifTyping')}
       />
       <Image 
          priority 
@@ -141,12 +206,8 @@ const Background = () => {
         fill 
         className='object-cover'
         sizes="100vw"
+        onLoad={() => handleImageLoad('gifCat')}
       />
-        {/* <div className='z-[100] absolute inset-0 bg-bg-dark transition-opacity duration-500 pointer-events-none' 
-            style={{ 
-              opacity: isBgLoading ? 1 : 0, 
-              pointerEvents: isBgLoading ? 'auto' : 'none' 
-              }} />  */}
     </div>
   );
 }

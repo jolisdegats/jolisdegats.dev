@@ -14,4 +14,4 @@ const MarkerComputer = () => {
     )
 }
 
-export default MarkerComputer;
+export { MarkerComputer };

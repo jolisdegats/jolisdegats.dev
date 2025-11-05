@@ -1,13 +1,11 @@
 'use client'
 
-import BackgroundImage from "@/components/Main";
+import Main from "@/components/Main";
 import { toggleHelpMarkers, changeModal } from "@/lib/context";
 import { useAppContext, useIsDesktop } from "@/lib/hooks";
 import { FaQuestionCircle, FaRegCopyright } from "react-icons/fa";
-import dynamic from "next/dynamic";
+import Credits from "@/components/Credits";
 import { useEffect, useRef } from "react";
-
-const Credits = dynamic(() => import("@/components/Credits"), { ssr: false });
 
 const ClientPage = () => {
     const { dispatch } = useAppContext();
@@ -87,7 +85,7 @@ const ClientPage = () => {
                     width: minWidthVh
                 }}
             >
-                <BackgroundImage />
+                <Main />
                 <div className="fixed bottom-5 right-5 flex space-x-1">
                     <button 
                         onTouchStart={() => dispatch(toggleHelpMarkers())}
