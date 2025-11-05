@@ -80,7 +80,7 @@ const Background = ({ onLoadingComplete }: BackgroundProps) => {
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [onLoadingComplete]);
+  }, []);
 
   const cloudImages = useMemo(() => [cloud1, cloud2, cloud3, cloud4, cloud5], []);
 
