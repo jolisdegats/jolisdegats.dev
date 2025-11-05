@@ -1,6 +1,6 @@
 
-import type { ShapeType } from "@/components/BackgroundImage/Shape";
-import Shape from "@/components/BackgroundImage/Shape";
+import type { ShapeType } from "@/components/Main/Shape";
+import Shape from "@/components/Main/Shape";
 
 const MarkerComputer = () => {
     const shape : ShapeType = {
@@ -14,4 +14,4 @@ const MarkerComputer = () => {
     )
 }
 
-export default MarkerComputer;
+export { MarkerComputer };

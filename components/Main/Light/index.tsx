@@ -1,4 +1,4 @@
-import Shape, { ShapeType } from "@/components/BackgroundImage/Shape";
+import Shape, { ShapeType } from "@/components/Main/Shape";
 import lightOn from '@/assets/light.webp';
 import { toggleLight } from "@/lib/context";
 import { useAppContext } from "@/lib/hooks";

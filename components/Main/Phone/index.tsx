@@ -1,4 +1,4 @@
-import Shape, { ShapeType } from "@/components/BackgroundImage/Shape";
+import Shape, { ShapeType } from "@/components/Main/Shape";
 import phoneOn from '@/assets/phone.webp';
 import { togglePhone } from "@/lib/context";
 import { useAppContext } from "@/lib/hooks";

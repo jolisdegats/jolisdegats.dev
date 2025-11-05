@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import Shape, { ShapeType } from "@/components/BackgroundImage/Shape";
+import Shape, { ShapeType } from "@/components/Main/Shape";
 import { changeModal } from "@/lib/context";
 import { useAppContext } from "@/lib/hooks";
 import BubbleModal from "@/components/UI/Modal/BubbleModal";

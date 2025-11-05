@@ -1,15 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import PopupModal from '@/components/UI/Modal/PopupModal';
-import Shape, { type ShapeType } from '@/components/BackgroundImage/Shape';
+import Shape, { type ShapeType } from '@/components/Main/Shape';
 import { changeModal } from '@/lib/context';
 import { useAppContext } from '@/lib/hooks';
 
-const MarkerFlowers: React.FC = () => {
+const MarkerFlowers = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const { dispatch } = useAppContext();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [, setIsModalOpen] = useState(false);
   const [isModalAnimationComplete, setIsModalAnimationComplete] = useState(false);
   
   useEffect(() => {
@@ -326,4 +326,4 @@ const fragmentShader = `
   }
 `;
 
-export default MarkerFlowers;
+export { MarkerFlowers };
