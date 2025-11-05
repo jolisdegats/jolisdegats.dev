@@ -30,7 +30,7 @@ interface BackgroundProps {
 }
 
 const Background = ({ onLoadingComplete }: BackgroundProps) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [, setIsLoading] = useState(true);
   const [cloudContainerRatio, setCloudContainerRatio] = useState(1);
   
   // Critical images that need to load before hiding the overlay
@@ -75,7 +75,7 @@ const Background = ({ onLoadingComplete }: BackgroundProps) => {
     timeoutRef.current = setTimeout(() => {
       setIsLoading(false);
       onLoadingComplete?.();
-    }, 5000);
+    }, 3000);
 
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
