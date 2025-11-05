@@ -50,7 +50,7 @@ const Main = () => {
 
   return (
     <>
-      {/* Loading overlay - appears immediately on top of everything */}
+      {/* Loading overlay */}
       <div 
         className='fixed inset-0 z-[200] bg-bg-dark transition-opacity duration-500 pointer-events-none' 
         style={{ 
