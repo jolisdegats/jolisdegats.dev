@@ -52,6 +52,43 @@ export default function RootLayout({
     <html lang="en" className={`${inter.className} ${playfair.className} antialiased`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+        {/* Critical CSS - inline to avoid render blocking */}
+        <style>{`
+          :root {
+            --foreground-rgb: 224, 224, 224;
+            --background-start-rgb: 40, 44, 52;
+            --background-end-rgb: 40, 44, 52;
+            --title-color: #4a90e2;
+            --link-color: #a3c4ff;
+            --link-hover-color: #61dafb;
+          }
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+          html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+          }
+          body {
+            color: rgb(var(--foreground-rgb));
+            background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+            font-family: 'Roboto', sans-serif;
+            overscroll-behavior: none;
+            -webkit-overflow-scrolling: touch;
+          }
+          main {
+            width: 100%;
+            height: 100%;
+            position: relative;
+          }
+          img {
+            max-width: 100%;
+            height: auto;
+          }
+        `}</style>
       </head>
       <body>
         <AppProvider>

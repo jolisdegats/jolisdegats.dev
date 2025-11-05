@@ -107,7 +107,7 @@ const Background = ({ onLoadingComplete }: BackgroundProps) => {
         alt="sky" 
         fill 
         className='object-cover'
-        sizes="100vw"
+        sizes="(max-width: 640px) 640px, (max-width: 1080px) 1080px, (max-width: 1200px) 1200px, 100vw"
         onLoad={() => handleImageLoad('sky')}
       />
       
@@ -118,7 +118,7 @@ const Background = ({ onLoadingComplete }: BackgroundProps) => {
         alt="sea" 
         fill 
         className='object-cover'
-        sizes="100vw"
+        sizes="(max-width: 640px) 640px, (max-width: 1080px) 1080px, (max-width: 1200px) 1200px, 100vw"
         onLoad={() => handleImageLoad('sea')}
       />
       
@@ -129,7 +129,7 @@ const Background = ({ onLoadingComplete }: BackgroundProps) => {
         alt="seaclouds" 
         fill 
         className='object-cover'
-        sizes="100vw"
+        sizes="(max-width: 640px) 640px, (max-width: 1080px) 1080px, (max-width: 1200px) 1200px, 100vw"
         onLoad={() => handleImageLoad('seaclouds')}
       />
 
@@ -155,7 +155,7 @@ const Background = ({ onLoadingComplete }: BackgroundProps) => {
           alt={id}
           fill
           className="object-contain"
-          sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 100vw"
+          sizes="(max-width: 640px) 640px, (max-width: 1080px) 1080px, (max-width: 1200px) 1200px, 100vw"
           onLoad={() => handleImageLoad(id as (typeof CRITICAL_IMAGES)[number])}
         />
       </div>
@@ -170,7 +170,7 @@ const Background = ({ onLoadingComplete }: BackgroundProps) => {
         alt="main background" 
         fill 
         className='object-cover'
-        sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 100vw"
+        sizes="(max-width: 640px) 640px, (max-width: 1080px) 1080px, (max-width: 1200px) 1200px, 100vw"
         onLoad={() => handleImageLoad('background')}
       />
 
@@ -179,10 +179,10 @@ const Background = ({ onLoadingComplete }: BackgroundProps) => {
          fetchPriority="high" 
         src={gifCode} 
         alt="code animation" 
-        unoptimized
         fill 
         className='object-cover'
-        sizes="100vw"
+        unoptimized
+        sizes="(max-width: 640px) 640px, (max-width: 1080px) 1080px, (max-width: 1200px) 1200px, 100vw"
         onLoad={() => handleImageLoad('gifCode')}
       />
       
@@ -190,22 +190,22 @@ const Background = ({ onLoadingComplete }: BackgroundProps) => {
          priority 
          fetchPriority="high" 
         src={gifTyping}
-        unoptimized
         alt="typing animation" 
         fill 
         className='object-cover'
-        sizes="100vw"
+        unoptimized
+        sizes="(max-width: 640px) 640px, (max-width: 1080px) 1080px, (max-width: 1200px) 1200px, 100vw"
         onLoad={() => handleImageLoad('gifTyping')}
       />
       <Image 
          priority 
          fetchPriority="high" 
         src={gifCat}
-        unoptimized
         alt="cat animation" 
         fill 
         className='object-cover'
-        sizes="100vw"
+        unoptimized
+        sizes="(max-width: 640px) 640px, (max-width: 1080px) 1080px, (max-width: 1200px) 1200px, 100vw"
         onLoad={() => handleImageLoad('gifCat')}
       />
     </div>
