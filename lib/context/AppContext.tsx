@@ -1,7 +1,7 @@
 'use client'
 import React, { createContext, useReducer } from 'react';
-import appReducer from './appReducer';
-import { Action } from './actions';
+import appReducer from '@/lib/context/appReducer';
+import { Action } from '@/lib/context/actions';
 
 
 export interface AppState {

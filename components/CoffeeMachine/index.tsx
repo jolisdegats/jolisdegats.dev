@@ -4,7 +4,7 @@ import coffeeMachineOnOff from '@/assets/sounds/coffee-machine-on-off.mp3';
 import coffeePouring from '@/assets/sounds/coffee-pouring.mp3';
 import coffeePouringEnd from '@/assets/sounds/coffee-pouring-end.mp3';
 import mugServed from '@/assets/sounds/mug-served.mp3';
-import Mug from './Mug';
+import Mug from '@/components/CoffeeMachine/Mug';
 import { useSoundEffect } from '@/lib/hooks/useSoundEffect';
 
 export interface HandleStateChange {
