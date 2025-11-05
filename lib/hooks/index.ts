@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
-import { AppContext } from "../context";
+import { AppContext } from "@/lib/context";
 
-export { useSoundEffect } from "./useSoundEffect";
+export { useSoundEffect } from "@/lib/hooks/useSoundEffect";
 
 export const useAppContext = () => useContext(AppContext);
 

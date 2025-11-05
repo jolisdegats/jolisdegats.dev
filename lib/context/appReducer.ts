@@ -1,7 +1,7 @@
 // lib/context/appReducer.ts
 
-import { Action } from "./actions";
-import { AppState } from "./AppContext";
+import { Action } from "@/lib/context/actions";
+import { AppState } from "@/lib/context/AppContext";
 
 const appReducer = (state: AppState, action: Action): AppState => {
   switch (action.type) {

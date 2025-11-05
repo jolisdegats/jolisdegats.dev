@@ -1,4 +1,4 @@
-import ClientPage from './client.page';
+import ClientPage from '@/app/client.page';
 
 const App = () => {
   return <ClientPage />

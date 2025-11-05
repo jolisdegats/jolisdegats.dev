@@ -2,7 +2,7 @@
 
 import Image from '@/components/UI/Image';
 import { useState, useEffect, useRef } from 'react';
-import CloudAnimation from './CloudAnimation';
+import CloudAnimation from '@/components/Main/Background/CloudAnimation';
 
 import background from '@/assets/main-background.webp';
 import gifCode from '@/assets/gif-code.webp';
