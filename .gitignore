@@ -5,6 +5,7 @@
 /.pnp
 .pnp.js
 .yarn/install-state.gz
+/Portfolio-assets
 
 # testing
 /coverage
