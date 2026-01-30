@@ -8,6 +8,7 @@ import { useAppContext } from '@/lib/hooks';
 const MarkerFlowers = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const pressStartTimeRef = useRef<number | null>(null);
   const { dispatch } = useAppContext();
   const [, setIsModalOpen] = useState(false);
   const [isModalAnimationComplete, setIsModalAnimationComplete] = useState(false);
@@ -21,6 +22,7 @@ const MarkerFlowers = () => {
       y: 0.3,
       clicked: false,
       vanishCanvas: false,
+      pressDuration: 0.1,
     };
 
     let renderer: THREE.WebGLRenderer;
@@ -62,6 +64,7 @@ const MarkerFlowers = () => {
           u_ratio: { value: containerRef.current!.clientWidth / containerRef.current!.clientHeight },
           u_texture: { value: null },
           u_clean: { value: 1 },
+          u_press_duration: { value: 0.1 },
         },
         vertexShader: vertexShader,
         fragmentShader: fragmentShader,
@@ -102,6 +105,7 @@ const MarkerFlowers = () => {
           shaderMaterial.uniforms.u_cursor.value = new THREE.Vector2(pointer.x, 1 - pointer.y);
           shaderMaterial.uniforms.u_stop_randomizer.value = new THREE.Vector2(Math.random(), Math.random());
           shaderMaterial.uniforms.u_stop_time.value = 0;
+          shaderMaterial.uniforms.u_press_duration.value = pointer.pressDuration;
           pointer.clicked = false;
         }
         shaderMaterial.uniforms.u_stop_time.value += clock.getDelta();
@@ -126,22 +130,40 @@ const MarkerFlowers = () => {
       updateSize();
     };
 
-    const handleClick = (e: MouseEvent) => {
+    const handlePointerDown = (e: MouseEvent | TouchEvent) => {
       const rect = canvasRef.current!.getBoundingClientRect();
-      pointer.x = (e.clientX - rect.left) / rect.width;
-      pointer.y = (e.clientY - rect.top) / rect.height;
-      pointer.clicked = true;
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+      pointer.x = (clientX - rect.left) / rect.width;
+      pointer.y = (clientY - rect.top) / rect.height;
+      pressStartTimeRef.current = Date.now();
+    };
+
+    const handlePointerUp = (e: MouseEvent | TouchEvent) => {
+      if (pressStartTimeRef.current !== null) {
+        const pressDuration = (Date.now() - pressStartTimeRef.current) / 1000; // Convert to seconds
+        // Clamp press duration between 0.05 and 2 seconds for reasonable sizing
+        pointer.pressDuration = Math.max(0.05, Math.min(2, pressDuration));
+        pointer.clicked = true;
+        pressStartTimeRef.current = null;
+      }
     };
 
     init();
     render();
 
     window.addEventListener('resize', handleResize);
-    canvas.addEventListener('click', handleClick); 
+    canvas.addEventListener('mousedown', handlePointerDown);
+    canvas.addEventListener('mouseup', handlePointerUp);
+    canvas.addEventListener('touchstart', handlePointerDown);
+    canvas.addEventListener('touchend', handlePointerUp);
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      canvas.removeEventListener('click', handleClick);
+      canvas.removeEventListener('mousedown', handlePointerDown);
+      canvas.removeEventListener('mouseup', handlePointerUp);
+      canvas.removeEventListener('touchstart', handlePointerDown);
+      canvas.removeEventListener('touchend', handlePointerUp);
     };
   }, [isModalAnimationComplete]);
 
@@ -197,6 +219,7 @@ const fragmentShader = `
   uniform float u_stop_time;
   uniform float u_clean;
   uniform vec2 u_stop_randomizer;
+  uniform float u_press_duration;
 
   uniform sampler2D u_texture;
   varying vec2 vUv;
@@ -238,8 +261,10 @@ const fragmentShader = `
 
     float flower_sectoral_shape = pow(abs(sin(a * _pet_n)), .4) + .25;
 
-    vec2 flower_size_range = vec2(.03, .1);
-    float size = flower_size_range[0] + u_stop_randomizer[0] * flower_size_range[1];
+    // Size based on press duration: longer press = bigger flower
+    // Base size .03, scales up to .13 for 2 second press
+    vec2 flower_size_range = vec2(.03, .13);
+    float size = flower_size_range[0] + u_press_duration * (flower_size_range[1] - flower_size_range[0]) / 2.0;
 
     float flower_radial_shape = pow(length(_p) / size, 2.);
     flower_radial_shape -= .1 * sin(8. * a);
