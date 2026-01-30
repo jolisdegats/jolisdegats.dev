@@ -50,12 +50,12 @@ const Main = () => {
 
   return (
     <>
-      {/* Loading overlay */}
+      {/* Loading overlay - non-blocking so LCP can be detected */}
       <div 
-        className='fixed inset-0 z-[200] bg-bg-dark transition-opacity duration-500 pointer-events-none' 
+        className='fixed inset-0 z-[200] bg-bg-dark transition-opacity duration-500' 
         style={{ 
-          opacity: isLoading ? 1 : 0, 
-          pointerEvents: isLoading ? 'auto' : 'none' 
+          opacity: isLoading ? 1 : 0.1,
+          pointerEvents: 'none'
         }} 
       />
       
