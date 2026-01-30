@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import Background from '@/components/Main/Background';
 import { ImageRadio } from '@/components/Main/Radio';
 import { ImagePhone } from '@/components/Main/Phone';
@@ -35,26 +35,14 @@ const MarkerComponents = {
 
 const Main = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Fallback: hide overlay after 5 seconds
-  useEffect(() => {
-    timeoutRef.current = setTimeout(() => {
-      setIsLoading(false);
-    }, 5000);
-
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
-  }, []);
 
   return (
     <>
-      {/* Loading overlay - non-blocking so LCP can be detected */}
+      {/* Loading overlay */}
       <div 
         className='fixed inset-0 z-[200] bg-bg-dark transition-opacity duration-500' 
         style={{ 
-          opacity: isLoading ? 1 : 0.1,
+          opacity: isLoading ? 1 : 0,
           pointerEvents: 'none'
         }} 
       />
