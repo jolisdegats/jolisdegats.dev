@@ -68,7 +68,7 @@ const VideoGamesShelfContent = () => {
     <div className="absolute inset-0 w-full h-full">
             <Image 
               placeholder='blur'
-              src={shelfImg.src} 
+              src={shelfImg}
               alt="Shelf" 
               fill
               className="object-cover"
