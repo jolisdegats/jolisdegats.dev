@@ -18,74 +18,74 @@ import Expedition33 from '@/assets/games/clairobscurexpedition33.webp';
 
 export const VIDEOGAMES_DATA: {
     title: string;
-    coverUrl: string;
+    coverUrl: any;
   }[] = [
     {
       title: "La Belle et la Bête",
-      coverUrl: BelleEtLaBete.src,
+      coverUrl: BelleEtLaBete,
     },
     {
       title: "Zelda : A link to the Past",
-      coverUrl: Zelda.src,
+      coverUrl: Zelda,
     },
     {
       title: "TKKG : Sur la piste des faux-monnayeurs",
-      coverUrl: TkkGSurLaPisteDesFauxMonnayeurs.src,
+      coverUrl: TkkGSurLaPisteDesFauxMonnayeurs,
     },
     {
       title: "Les Sims",
-      coverUrl: LesSims.src,
+      coverUrl: LesSims,
     },
     {
       title: "Digimon World",
-      coverUrl: DigimonWorld.src,
+      coverUrl: DigimonWorld,
     },
     {
       title: "RollerCoaster Tycoon",
-      coverUrl: RollerCoasterTycoon.src,
+      coverUrl: RollerCoasterTycoon,
     },
     {
       title: "Monster Hunter",
-      coverUrl: MonsterHunter.src,
+      coverUrl: MonsterHunter,
     },
     {
       title: "Les Chevaliers de Baphomet : Le Manuscrit de Voynich",
-      coverUrl: BrokenSword.src,
+      coverUrl: BrokenSword,
     },
     {
       title: "Pharaon",
-      coverUrl: Pharaon.src,
+      coverUrl: Pharaon,
     },
     {
       title: "Syberia",
-      coverUrl: Syberia.src,
+      coverUrl: Syberia,
     },
     {
       title: "Uncharted",
-      coverUrl: Uncharted.src,
+      coverUrl: Uncharted,
     },
     {
       title: "Dreamfall : The Longest Journey",
-      coverUrl: DreamfallTheLongestJourney.src,
+      coverUrl: DreamfallTheLongestJourney,
     },
     {
       title: "Heavy Rain",
-      coverUrl: HeavyRain.src,
+      coverUrl: HeavyRain,
     },
     {
       title: "To the Moon",
-      coverUrl: ToTheMoon.src,
+      coverUrl: ToTheMoon,
     },
     {
       title: "Heroes of the Storm",
-      coverUrl: HeroesOfTheStorm.src,
+      coverUrl: HeroesOfTheStorm,
     },
     {
       title: "Detroit : Become Human",
-      coverUrl: DetroitBecomeHuman.src,
+      coverUrl: DetroitBecomeHuman,
     },
     {
       title: "Clair Obscur : Expedition 33",
-      coverUrl: Expedition33.src,
+      coverUrl: Expedition33,
     },
   ];

@@ -9,10 +9,11 @@ import {
   UNFOCUS_ROTATE_AND_TRANSLATE_DURATION,
   FOCUS_ROTATION_DURATION,
 } from '@/components/VideoGamesShelf/constants';
+import type { StaticImageData } from "next/image";
 
 interface VideoGameItemProps {
   title: string;
-  coverUrl: string;
+  coverUrl: StaticImageData;
   index: number;
   isFocused: boolean;
   isHovered: boolean;
