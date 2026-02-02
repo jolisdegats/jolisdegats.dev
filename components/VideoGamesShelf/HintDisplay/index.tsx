@@ -1,16 +1,19 @@
-import { PiHandSwipeLeft, PiHandSwipeRight } from "react-icons/pi";
-import { RiSpace } from "react-icons/ri";
-import { FaLongArrowAltLeft, FaLongArrowAltRight } from "react-icons/fa";
+import { PiHandSwipeLeft, PiHandSwipeRight } from 'react-icons/pi'
+import { RiSpace } from 'react-icons/ri'
+import { FaLongArrowAltLeft, FaLongArrowAltRight } from 'react-icons/fa'
 
 interface HintDisplayProps {
-  isVisible: boolean;
+  isVisible: boolean
 }
 
 export const HintDisplay = ({ isVisible }: HintDisplayProps) => {
   return (
     <div
       className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white text-opacity-30 hover:text-opacity-100 text-sm transition-all duration-500"
-      style={{ opacity: isVisible ? 1 : 0, bottom: isVisible ? "40px" : "30px" }}
+      style={{
+        opacity: isVisible ? 1 : 0,
+        bottom: isVisible ? '40px' : '30px'
+      }}
     >
       <div className="text-center">
         {/* Desktop keyboard hint */}
@@ -28,5 +31,5 @@ export const HintDisplay = ({ isVisible }: HintDisplayProps) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

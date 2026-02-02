@@ -1,13 +1,9 @@
-"use client";
+'use client'
 
 export default function Transition({
-  children,
+  children
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
-  return (
-    <div className="page-transition">
-      {children}
-    </div>
-  );
+  return <div className="page-transition">{children}</div>
 }

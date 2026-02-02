@@ -1,26 +1,24 @@
 'use client'
-import React, { createContext, useReducer } from 'react';
-import appReducer from '@/lib/context/appReducer';
-import { Action } from '@/lib/context/actions';
-
+import React, { createContext, useReducer } from 'react'
+import appReducer from '@/lib/context/appReducer'
+import { Action } from '@/lib/context/actions'
 
 export interface AppState {
-  showHelpMarkers: boolean;
-  isRadioOn: boolean;
-  isLightOn: boolean;
-  isPhoneOn: boolean;
-  isFridgeOpen: boolean;
-  isVideoGamesBubbleOn: boolean;
+  showHelpMarkers: boolean
+  isRadioOn: boolean
+  isLightOn: boolean
+  isPhoneOn: boolean
+  isFridgeOpen: boolean
+  isVideoGamesBubbleOn: boolean
   modalOpen: {
-    name: string | null;
-  };
+    name: string | null
+  }
 }
 
 interface AppContextType {
-  state: AppState;
-  dispatch: React.Dispatch<Action>;
+  state: AppState
+  dispatch: React.Dispatch<Action>
 }
-
 
 const initialState: AppState = {
   showHelpMarkers: false,
@@ -29,24 +27,24 @@ const initialState: AppState = {
   isPhoneOn: false,
   isVideoGamesBubbleOn: false,
   isFridgeOpen: false,
-  modalOpen: {name : null},
+  modalOpen: { name: null }
 }
 
 export const AppContext = createContext<AppContextType>({
   state: initialState,
-  dispatch: () => {},
-});
+  dispatch: () => {}
+})
 
 interface AppProviderProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export const AppProvider = ({ children }: AppProviderProps) => {
-    const [state, dispatch] = useReducer(appReducer, initialState);
+  const [state, dispatch] = useReducer(appReducer, initialState)
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>
       {children}
     </AppContext.Provider>
-  );
-};
+  )
+}
