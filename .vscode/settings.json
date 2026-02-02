@@ -1,12 +1,8 @@
 {
-
-  "eslint.format.enable": true,
   "editor.codeActionsOnSave": {
-    "source.removeUnusedImports": "explicit",
-    "source.addMissingImports": "explicit",
-    "source.fixAll": "explicit"
+    "source.fixAll.eslint": "explicit"
   },
-  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "files.watcherExclude": {
     "**/.next": true,
@@ -30,13 +26,12 @@
     "package-lock.json": true,
     "**/storybook-static": true
   },
-  "typescript.preferences.preferTypeOnlyAutoImports": true, // Prefer type-only imports
+  "typescript.preferenes.preferTypeOnlyAutoImports": true, // Prefer type-only imports
   "typescript.tsdk": "node_modules/typescript/lib", // Use the workspace version of TypeScript
   "typescript.enablePromptUseWorkspaceTsdk": true, // For security reasons it's require that users opt into using the workspace version of typescript
   "typescript.preferences.autoImportFileExcludePatterns": [
     // useRouter should be imported from `next/navigation` instead of `next/router`
     "next/router.d.ts",
     "next/dist/client/router.d.ts"
-  ],
+  ]
 }
-

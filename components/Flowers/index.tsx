@@ -1,207 +1,235 @@
-import { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
-import PopupModal from '@/components/UI/Modal/PopupModal';
-import Shape, { type ShapeType } from '@/components/Shape';
-import { changeModal } from '@/lib/context';
-import { useAppContext } from '@/lib/hooks';
+import { useEffect, useRef, useState } from 'react'
+import * as THREE from 'three'
+import PopupModal from '@/components/UI/Modal/PopupModal'
+import Shape, { type ShapeType } from '@/components/Shape'
+import { changeModal } from '@/lib/context'
+import { useAppContext } from '@/lib/hooks'
 
 const MarkerFlowers = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const pressStartTimeRef = useRef<number | null>(null);
-  const { dispatch } = useAppContext();
-  const [, setIsModalOpen] = useState(false);
-  const [isModalAnimationComplete, setIsModalAnimationComplete] = useState(false);
-  
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const pressStartTimeRef = useRef<number | null>(null)
+  const { dispatch } = useAppContext()
+  const [, setIsModalOpen] = useState(false)
+  const [isModalAnimationComplete, setIsModalAnimationComplete] =
+    useState(false)
+
   useEffect(() => {
-    if (!canvasRef.current || !containerRef.current || !isModalAnimationComplete) return;
-    
+    if (
+      !canvasRef.current ||
+      !containerRef.current ||
+      !isModalAnimationComplete
+    )
+      return
+
     const canvas = canvasRef.current
     const pointer = {
       x: 0.66,
       y: 0.3,
       clicked: false,
       vanishCanvas: false,
-      pressDuration: 0.1,
-    };
+      pressDuration: 0.1
+    }
 
-    let renderer: THREE.WebGLRenderer;
-    let sceneShader: THREE.Scene;
-    let sceneBasic: THREE.Scene;
-    let camera: THREE.OrthographicCamera;
-    let clock: THREE.Clock;
-    let renderTargets: THREE.WebGLRenderTarget[];
-    let shaderMaterial: THREE.ShaderMaterial;
-    let basicMaterial: THREE.MeshBasicMaterial;
+    let renderer: THREE.WebGLRenderer
+    let sceneShader: THREE.Scene
+    let sceneBasic: THREE.Scene
+    let camera: THREE.OrthographicCamera
+    let clock: THREE.Clock
+    let renderTargets: THREE.WebGLRenderTarget[]
+    let shaderMaterial: THREE.ShaderMaterial
+    let basicMaterial: THREE.MeshBasicMaterial
 
     const init = () => {
       renderer = new THREE.WebGLRenderer({
         canvas: canvasRef.current!,
-        alpha: true,
-      });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        alpha: true
+      })
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-      sceneShader = new THREE.Scene();
-      sceneBasic = new THREE.Scene();
-      camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 10);
-      clock = new THREE.Clock();
+      sceneShader = new THREE.Scene()
+      sceneBasic = new THREE.Scene()
+      camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 10)
+      clock = new THREE.Clock()
 
       renderTargets = [
-        new THREE.WebGLRenderTarget(containerRef.current!.clientWidth, containerRef.current!.clientHeight),
-        new THREE.WebGLRenderTarget(containerRef.current!.clientWidth, containerRef.current!.clientHeight),
-      ];
+        new THREE.WebGLRenderTarget(
+          containerRef.current!.clientWidth,
+          containerRef.current!.clientHeight
+        ),
+        new THREE.WebGLRenderTarget(
+          containerRef.current!.clientWidth,
+          containerRef.current!.clientHeight
+        )
+      ]
 
-      createPlane();
-      updateSize();
-    };
+      createPlane()
+      updateSize()
+    }
 
     const createPlane = () => {
       shaderMaterial = new THREE.ShaderMaterial({
         uniforms: {
           u_stop_time: { value: 0 },
-          u_stop_randomizer: { value: new THREE.Vector2(Math.random(), Math.random()) },
+          u_stop_randomizer: {
+            value: new THREE.Vector2(Math.random(), Math.random())
+          },
           u_cursor: { value: new THREE.Vector2(pointer.x, pointer.y) },
-          u_ratio: { value: containerRef.current!.clientWidth / containerRef.current!.clientHeight },
+          u_ratio: {
+            value:
+              containerRef.current!.clientWidth /
+              containerRef.current!.clientHeight
+          },
           u_texture: { value: null },
           u_clean: { value: 1 },
-          u_press_duration: { value: 0.1 },
+          u_press_duration: { value: 0.1 }
         },
         vertexShader: vertexShader,
-        fragmentShader: fragmentShader,
-      });
+        fragmentShader: fragmentShader
+      })
 
-      basicMaterial = new THREE.MeshBasicMaterial();
-      const planeGeometry = new THREE.PlaneGeometry(2, 2);
-      const planeBasic = new THREE.Mesh(planeGeometry, basicMaterial);
-      const planeShader = new THREE.Mesh(planeGeometry, shaderMaterial);
-      sceneBasic.add(planeBasic);
-      sceneShader.add(planeShader);
-    };
+      basicMaterial = new THREE.MeshBasicMaterial()
+      const planeGeometry = new THREE.PlaneGeometry(2, 2)
+      const planeBasic = new THREE.Mesh(planeGeometry, basicMaterial)
+      const planeShader = new THREE.Mesh(planeGeometry, shaderMaterial)
+      sceneBasic.add(planeBasic)
+      sceneShader.add(planeShader)
+    }
 
     const updateSize = () => {
-      const width = containerRef.current!.clientWidth;
-      const height = containerRef.current!.clientHeight;
-      
+      const width = containerRef.current!.clientWidth
+      const height = containerRef.current!.clientHeight
+
       if (shaderMaterial && shaderMaterial.uniforms) {
-        shaderMaterial.uniforms.u_ratio.value = width / height;
+        shaderMaterial.uniforms.u_ratio.value = width / height
       }
-      renderer.setSize(width, height);
-      renderTargets.forEach(rt => rt.setSize(width, height));
-    };
+      renderer.setSize(width, height)
+      renderTargets.forEach((rt) => rt.setSize(width, height))
+    }
 
     const cleanCanvas = () => {
-      pointer.vanishCanvas = true;
+      pointer.vanishCanvas = true
       setTimeout(() => {
-        pointer.vanishCanvas = false;
-      }, 50);
-    };
+        pointer.vanishCanvas = false
+      }, 50)
+    }
 
     const render = () => {
       if (shaderMaterial && shaderMaterial.uniforms) {
-        shaderMaterial.uniforms.u_clean.value = pointer.vanishCanvas ? 0 : 1;
-        shaderMaterial.uniforms.u_texture.value = renderTargets[0].texture;
+        shaderMaterial.uniforms.u_clean.value = pointer.vanishCanvas ? 0 : 1
+        shaderMaterial.uniforms.u_texture.value = renderTargets[0].texture
 
         if (pointer.clicked) {
-          shaderMaterial.uniforms.u_cursor.value = new THREE.Vector2(pointer.x, 1 - pointer.y);
-          shaderMaterial.uniforms.u_stop_randomizer.value = new THREE.Vector2(Math.random(), Math.random());
-          shaderMaterial.uniforms.u_stop_time.value = 0;
-          shaderMaterial.uniforms.u_press_duration.value = pointer.pressDuration;
-          pointer.clicked = false;
+          shaderMaterial.uniforms.u_cursor.value = new THREE.Vector2(
+            pointer.x,
+            1 - pointer.y
+          )
+          shaderMaterial.uniforms.u_stop_randomizer.value = new THREE.Vector2(
+            Math.random(),
+            Math.random()
+          )
+          shaderMaterial.uniforms.u_stop_time.value = 0
+          shaderMaterial.uniforms.u_press_duration.value = pointer.pressDuration
+          pointer.clicked = false
         }
-        shaderMaterial.uniforms.u_stop_time.value += clock.getDelta();
+        shaderMaterial.uniforms.u_stop_time.value += clock.getDelta()
       }
 
-      renderer.setRenderTarget(renderTargets[1]);
-      renderer.render(sceneShader, camera);
+      renderer.setRenderTarget(renderTargets[1])
+      renderer.render(sceneShader, camera)
       if (basicMaterial) {
-        basicMaterial.map = renderTargets[1].texture;
+        basicMaterial.map = renderTargets[1].texture
       }
-      renderer.setRenderTarget(null);
-      renderer.render(sceneBasic, camera);
+      renderer.setRenderTarget(null)
+      renderer.render(sceneBasic, camera)
 
-      let tmp = renderTargets[0];
-      renderTargets[0] = renderTargets[1];
-      renderTargets[1] = tmp;
+      let tmp = renderTargets[0]
+      renderTargets[0] = renderTargets[1]
+      renderTargets[1] = tmp
 
-      requestAnimationFrame(render);
-    };
+      requestAnimationFrame(render)
+    }
 
     const handleResize = () => {
-      updateSize();
-    };
+      updateSize()
+    }
 
     const handlePointerDown = (e: MouseEvent | TouchEvent) => {
-      const rect = canvasRef.current!.getBoundingClientRect();
-      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-      pointer.x = (clientX - rect.left) / rect.width;
-      pointer.y = (clientY - rect.top) / rect.height;
-      pressStartTimeRef.current = Date.now();
-    };
+      const rect = canvasRef.current!.getBoundingClientRect()
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
+      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY
+      pointer.x = (clientX - rect.left) / rect.width
+      pointer.y = (clientY - rect.top) / rect.height
+      pressStartTimeRef.current = Date.now()
+    }
 
     const handlePointerUp = (e: MouseEvent | TouchEvent) => {
       if (pressStartTimeRef.current !== null) {
-        const pressDuration = (Date.now() - pressStartTimeRef.current) / 1000; // Convert to seconds
+        const pressDuration = (Date.now() - pressStartTimeRef.current) / 1000 // Convert to seconds
         // Clamp press duration between 0.05 and 2 seconds for reasonable sizing
-        pointer.pressDuration = Math.max(0.05, Math.min(2, pressDuration));
-        pointer.clicked = true;
-        pressStartTimeRef.current = null;
+        pointer.pressDuration = Math.max(0.05, Math.min(2, pressDuration))
+        pointer.clicked = true
+        pressStartTimeRef.current = null
       }
-    };
+    }
 
-    init();
-    render();
+    init()
+    render()
 
-    window.addEventListener('resize', handleResize);
-    canvas.addEventListener('mousedown', handlePointerDown);
-    canvas.addEventListener('mouseup', handlePointerUp);
-    canvas.addEventListener('touchstart', handlePointerDown);
-    canvas.addEventListener('touchend', handlePointerUp);
+    window.addEventListener('resize', handleResize)
+    canvas.addEventListener('mousedown', handlePointerDown)
+    canvas.addEventListener('mouseup', handlePointerUp)
+    canvas.addEventListener('touchstart', handlePointerDown)
+    canvas.addEventListener('touchend', handlePointerUp)
 
     return () => {
-      window.removeEventListener('resize', handleResize);
-      canvas.removeEventListener('mousedown', handlePointerDown);
-      canvas.removeEventListener('mouseup', handlePointerUp);
-      canvas.removeEventListener('touchstart', handlePointerDown);
-      canvas.removeEventListener('touchend', handlePointerUp);
-    };
-  }, [isModalAnimationComplete]);
+      window.removeEventListener('resize', handleResize)
+      canvas.removeEventListener('mousedown', handlePointerDown)
+      canvas.removeEventListener('mouseup', handlePointerUp)
+      canvas.removeEventListener('touchstart', handlePointerDown)
+      canvas.removeEventListener('touchend', handlePointerUp)
+    }
+  }, [isModalAnimationComplete])
 
   const shape: ShapeType = {
     type: 'polygon',
     onClick: () => {
-      dispatch(changeModal({name: "flowers"}));
-      setIsModalOpen(true);
+      dispatch(changeModal({ name: 'flowers' }))
+      setIsModalOpen(true)
     },
     title: 'flowers',
-    points: "732.627 1324.85 901.105 1327.41 903.658 1067.03 888.342 1031.29 903.658 931.738 916.422 867.92 964.923 829.63 941.949 778.576 783.681 804.103 765.812 635.624 770.917 556.49 650.94 668.809 597.333 939.396 681.573 1018.53 684.125 1207.43",
-  };
+    points:
+      '732.627 1324.85 901.105 1327.41 903.658 1067.03 888.342 1031.29 903.658 931.738 916.422 867.92 964.923 829.63 941.949 778.576 783.681 804.103 765.812 635.624 770.917 556.49 650.94 668.809 597.333 939.396 681.573 1018.53 684.125 1207.43'
+  }
 
   const handleCleanCanvas = () => {
     if (canvasRef.current) {
-      const event = new Event('cleanCanvas');
-      canvasRef.current.dispatchEvent(event);
+      const event = new Event('cleanCanvas')
+      canvasRef.current.dispatchEvent(event)
     }
-  };
+  }
 
   return (
     <>
-      <PopupModal 
-        name="flowers" 
+      <PopupModal
+        name="flowers"
         handleClose={() => {
-          setIsModalOpen(false);
-          setIsModalAnimationComplete(false);
+          setIsModalOpen(false)
+          setIsModalAnimationComplete(false)
         }}
         onAnimationComplete={() => setIsModalAnimationComplete(true)}
       >
-        <div ref={containerRef} className="top-0 left-0 w-full h-screen flex flex-col-reverse items-start">
+        <div
+          ref={containerRef}
+          className="top-0 left-0 w-full h-screen flex flex-col-reverse items-start"
+        >
           <canvas ref={canvasRef} />
         </div>
       </PopupModal>
       <Shape shape={shape} index="flowers" />
     </>
-  );
-};
+  )
+}
 
 const vertexShader = `
   varying vec2 vUv;
@@ -209,7 +237,7 @@ const vertexShader = `
     vUv = uv;
     gl_Position = vec4(position, 1.);
   }
-`;
+`
 
 const fragmentShader = `
   #define PI 3.14159265359
@@ -349,6 +377,6 @@ const fragmentShader = `
 
     gl_FragColor = vec4(color, 1.);
   }
-`;
+`
 
-export { MarkerFlowers };
+export { MarkerFlowers }

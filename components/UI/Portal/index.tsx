@@ -1,40 +1,43 @@
-import { useLayoutEffect, useState, ReactNode } from 'react';
-import { createPortal } from 'react-dom';
+import { useLayoutEffect, useState, ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 
 const createWrapperAndAppendToBody = (wrapperId: string): HTMLDivElement => {
-  const wrapperElement = document.createElement('div');
-  wrapperElement.setAttribute('id', wrapperId);
-  document.body.appendChild(wrapperElement);
-  return wrapperElement;
-};
+  const wrapperElement = document.createElement('div')
+  wrapperElement.setAttribute('id', wrapperId)
+  document.body.appendChild(wrapperElement)
+  return wrapperElement
+}
 
 type PortalProps = {
-  children: ReactNode;
-  wrapperId?: string;
-};
+  children: ReactNode
+  wrapperId?: string
+}
 
-const Portal: React.FC<PortalProps> = ({ children, wrapperId = 'react-portal-wrapper' }) => {
-  const [wrapperElement, setWrapperElement] = useState<HTMLElement | null>(null);
+const Portal: React.FC<PortalProps> = ({
+  children,
+  wrapperId = 'react-portal-wrapper'
+}) => {
+  const [wrapperElement, setWrapperElement] = useState<HTMLElement | null>(null)
 
   useLayoutEffect(() => {
-    let element = document.getElementById(wrapperId);
-    let systemCreated = false;
+    let element = document.getElementById(wrapperId)
+    let systemCreated = false
     if (!element) {
-      systemCreated = true;
-      element = createWrapperAndAppendToBody(wrapperId);
+      systemCreated = true
+      element = createWrapperAndAppendToBody(wrapperId)
     }
-    setWrapperElement(element);
+    setWrapperElement(element)
 
     return () => {
       if (systemCreated && element.parentNode) {
-        element.parentNode.removeChild(element);
+        element.parentNode.removeChild(element)
       }
-    };
-  }, [wrapperId]);
+    }
+  }, [wrapperId])
 
-  if (wrapperElement === null) return null;
+  if (wrapperElement === null) return null
 
-  return createPortal(children, wrapperElement);
-};
+  return createPortal(children, wrapperElement)
+}
 
-export default Portal;
+export default Portal
