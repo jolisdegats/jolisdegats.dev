@@ -108,12 +108,6 @@ const ClientPage = () => {
             <FaQuestionCircle className="text-xl " title="Help" />
           </button>
           <button
-            onClick={() => dispatch(changeModal({ name: 'globe' }))}
-            className="bg-white hover:bg-opacity-30 bg-opacity-0 rounded-md p-1.5 cursor-pointer text-white text-opacity-30 hover:text-opacity-100"
-          >
-            <FaGlobe className="text-xl " title="Visited Countries" />
-          </button>
-          <button
             onClick={() => dispatch(changeModal({ name: 'credits' }))}
             className="bg-white hover:bg-opacity-30 bg-opacity-0 rounded-md p-1.5 cursor-pointer text-white text-opacity-30 hover:text-opacity-100"
           >
