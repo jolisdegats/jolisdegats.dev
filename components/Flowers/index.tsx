@@ -5,7 +5,7 @@ import Shape, { type ShapeType } from '@/components/Shape'
 import { changeModal } from '@/lib/context'
 import { useAppContext } from '@/lib/hooks'
 
-const MarkerFlowers = () => {
+export const MarkerFlowers = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const pressStartTimeRef = useRef<number | null>(null)
@@ -107,13 +107,6 @@ const MarkerFlowers = () => {
       renderTargets.forEach((rt) => rt.setSize(width, height))
     }
 
-    const cleanCanvas = () => {
-      pointer.vanishCanvas = true
-      setTimeout(() => {
-        pointer.vanishCanvas = false
-      }, 50)
-    }
-
     const render = () => {
       if (shaderMaterial && shaderMaterial.uniforms) {
         shaderMaterial.uniforms.u_clean.value = pointer.vanishCanvas ? 0 : 1
@@ -200,13 +193,6 @@ const MarkerFlowers = () => {
     title: 'flowers',
     points:
       '732.627 1324.85 901.105 1327.41 903.658 1067.03 888.342 1031.29 903.658 931.738 916.422 867.92 964.923 829.63 941.949 778.576 783.681 804.103 765.812 635.624 770.917 556.49 650.94 668.809 597.333 939.396 681.573 1018.53 684.125 1207.43'
-  }
-
-  const handleCleanCanvas = () => {
-    if (canvasRef.current) {
-      const event = new Event('cleanCanvas')
-      canvasRef.current.dispatchEvent(event)
-    }
   }
 
   return (
@@ -379,4 +365,3 @@ const fragmentShader = `
   }
 `
 
-export { MarkerFlowers }

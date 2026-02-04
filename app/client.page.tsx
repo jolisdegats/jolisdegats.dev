@@ -1,12 +1,11 @@
 'use client'
 
-import Main from "@/components";
-import { toggleHelpMarkers, changeModal } from "@/lib/context";
-import { useAppContext, useIsDesktop } from "@/lib/hooks";
-import { FaQuestionCircle, FaRegCopyright, FaGlobe } from "react-icons/fa";
-import Credits from "@/components/Credits";
-import Globe from "@/components/Globe";
-import { useEffect, useRef } from "react";
+import Main from '@/components'
+import { toggleHelpMarkers, changeModal } from '@/lib/context'
+import { useAppContext, useIsDesktop } from '@/lib/hooks'
+import { FaQuestionCircle, FaRegCopyright } from 'react-icons/fa'
+import Credits from '@/components/Credits'
+import { useEffect, useRef } from 'react'
 
 const ClientPage = () => {
   const { dispatch } = useAppContext()
@@ -103,12 +102,6 @@ const ClientPage = () => {
                         <FaQuestionCircle className="text-xl " title="Help" />
                     </button>
                     <button
-                        onClick={() => dispatch(changeModal({ name: 'globe' }))}
-                        className="bg-white hover:bg-opacity-30 bg-opacity-0 rounded-md p-1.5 cursor-pointer text-white text-opacity-30 hover:text-opacity-100"
-                    >
-                        <FaGlobe className="text-xl " title="Visited Countries" />
-                    </button>
-                    <button
                         onClick={() => dispatch(changeModal({ name: 'credits' }))}
                         className="bg-white hover:bg-opacity-30 bg-opacity-0 rounded-md p-1.5 cursor-pointer text-white text-opacity-30 hover:text-opacity-100"
                     >
@@ -116,7 +109,6 @@ const ClientPage = () => {
                     </button>
                     <Credits />
                 </div>
-                <Globe/>
             </div>
         </div>
  )
